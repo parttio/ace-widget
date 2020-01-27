@@ -1,4 +1,4 @@
-# Paper Slider
+# Ace Editor Vaadin v14
 
 Vaadin 14 Java integration of @polymer/paper-slider
 
