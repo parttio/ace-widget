@@ -1,6 +1,7 @@
 package com.hilerio.ace;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
@@ -25,6 +26,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	public AceEditor() {
 		super("value", "", false);
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		addListener(ChangeEvent.class, this::updateValue);
+	}
+
+	public void updateValue(ChangeEvent event) {
+		setValue(event.getValue());
 	}
 
 	/**
