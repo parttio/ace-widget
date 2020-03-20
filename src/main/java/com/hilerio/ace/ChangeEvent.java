@@ -6,6 +6,7 @@ package com.hilerio.ace;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.DomEvent;
+import com.vaadin.flow.component.EventData;
 
 @DomEvent("editor-content")
 public class ChangeEvent extends ComponentEvent<AceEditor> {
