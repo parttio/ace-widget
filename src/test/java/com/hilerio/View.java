@@ -16,15 +16,12 @@ public class View extends Div {
 		aceEditor.setValue("TEST");
 		aceEditor.setTheme(AceTheme.monokai);
 		aceEditor.setMode(AceMode.xml);
-		//aceEditor.setHeight("500px");
-		//aceEditor.setWidth("500px");
+		aceEditor.setHeight("500px");
+		aceEditor.setWidth("500px");
 		aceEditor.setFontSize(20);
 		aceEditor.setReadOnly(false);
 		
-		aceEditor.addValueChangeListener(e ->{
-			//System.out.println(e.getValue());
-			System.out.println("*****");
-		});
+		aceEditor.addValueChangeListener(e -> System.out.println(e.getValue()));
 
 		// aceEditor.setSofttabs(false);
 		// aceEditor.setTabSize(25);
@@ -37,7 +34,6 @@ public class View extends Div {
 		// System.out.println("Focus");
 		// });
 
-		add(aceEditor, new Button("demo", e->{System.out.println(aceEditor.getValue());}));
-
+		add(aceEditor, new Button("Print Value", e -> System.out.println(aceEditor.getValue())));
 	}
 }
