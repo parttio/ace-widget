@@ -14,26 +14,9 @@ public class View extends Div {
 
 		AceEditor aceEditor = new AceEditor();
 		aceEditor.setValue("TEST");
-		aceEditor.setTheme(AceTheme.monokai);
-		aceEditor.setMode(AceMode.xml);
-		aceEditor.setHeight("500px");
-		aceEditor.setWidth("500px");
-		aceEditor.setFontSize(20);
-		aceEditor.setReadOnly(false);
-		
-		aceEditor.addValueChangeListener(e -> System.out.println(e.getValue()));
+		aceEditor.setMode(AceMode.pgsql);
+		aceEditor.setSizeFull();
 
-		// aceEditor.setSofttabs(false);
-		// aceEditor.setTabSize(25);
-		// aceEditor.setWrap(false);
-		// aceEditor.setMinlines(2);
-		// aceEditor.setMaxlines(10);
-		// aceEditor.setPlaceholder("DEMO");
-
-		// aceEditor.addFocusListener(e -> {
-		// System.out.println("Focus");
-		// });
-
-		add(aceEditor, new Button("Print Value", e -> System.out.println(aceEditor.getValue())));
+		add(aceEditor);
 	}
 }

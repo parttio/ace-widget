@@ -3,7 +3,6 @@ package com.hilerio.ace;
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -16,8 +15,7 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 @Tag("ace-widget")
 @NpmPackage(value = "@granite-elements/ace-widget", version = "2.2.7-b1")
 @JsModule("./@granite-elements/ace-widget/ace-widget.js")
-public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor>,
-	HasSize {
+public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
 	public AceEditor() {
 		super("value", "", false);
@@ -65,7 +63,6 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setValue(String value) {
 		getElement().setProperty("value", value);
-		// fireEvent(new ChangeEvent(this, false));
 	}
 
 	/**
@@ -148,12 +145,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		return getElement().getProperty("value");
 	}
 
-	// public void addValueChangeListener(ValueChangeListener listener) {
-	// this.getElement().addEventListener("editor-content", args ->
-	// listener.valueChanged(this));
-	// }
-	//
-	// public static interface ValueChangeListener {
-	// public void valueChanged(AceEditor juicyAceEditor);
-	// }
+	public void setWidth(String width) {
+		getElement().executeJs("this.shadowRoot.querySelector(\"#editor\").style.width = $0;", width);
+	}
+
+	// TODO: 20.03.2020 fix me. for some reason the height style is always set to 210px
+	public void setHeight(String height) {
+		getElement().executeJs("this.shadowRoot.querySelector(\"#editor\").style.height = $0;", height);
+	}
+
+	public void setSizeFull() {
+		setWidth("100%");
+		setHeight("100%");
+	}
 }
