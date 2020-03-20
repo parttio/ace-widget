@@ -3,14 +3,11 @@ package com.hilerio.ace;
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.hilerio.ace.AceMode;
-import com.hilerio.ace.AceTheme;
 
 /**
  * @author: Sergio Alberto Hilerio.
@@ -19,10 +16,8 @@ import com.hilerio.ace.AceTheme;
 @Tag("ace-widget")
 @NpmPackage(value = "@granite-elements/ace-widget", version = "2.2.7-b1")
 @JsModule("./@granite-elements/ace-widget/ace-widget.js")
-public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
-
-	@Id("editor")
-	private Div editor;
+public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor>,
+	HasSize {
 
 	public AceEditor() {
 		super("value", "", false);
@@ -142,24 +137,6 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setReadOnly(boolean value) {
 		getElement().setAttribute("readonly", value);
 	}
-
-	/**
-	 * Sets height in px
-	 * 
-	 * @param height
-	 */
-	public void setHeight(String height) {
-		editor.getElement().getStyle().set("min-height", height);
-	};
-
-	/**
-	 * Sets width in px or pixels
-	 * 
-	 * @param width
-	 */
-	public void setWidth(String width) {
-		editor.getElement().getStyle().set("max-width", width);
-	};
 
 	/**
 	 * Returns the current value of the editor.
