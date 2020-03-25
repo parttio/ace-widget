@@ -151,7 +151,8 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	// TODO: 20.03.2020 fix me. for some reason the height style is always set to 210px
 	public void setHeight(String height) {
-		getElement().executeJs("this.shadowRoot.querySelector(\"#editor\").style.height = $0;", height);
+		getElement().getStyle().set("height", height);
+		getElement().executeJs("this.shadowRoot.querySelector(\"#editor\").style.height = $0;", "100%");
 	}
 
 	public void setSizeFull() {

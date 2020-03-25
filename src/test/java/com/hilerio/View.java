@@ -12,11 +12,16 @@ public class View extends Div {
 
 	public View() {
 
+		setSizeFull();
+
 		AceEditor aceEditor = new AceEditor();
 		aceEditor.setValue("TEST");
 		aceEditor.setMode(AceMode.pgsql);
-		aceEditor.setSizeFull();
+		aceEditor.setHeight("75%");
 
-		add(aceEditor);
+		Button setHeight = new Button("Height = 100%");
+		setHeight.addClickListener(event -> aceEditor.setHeight("100%"));
+
+		add(aceEditor, setHeight);
 	}
 }
