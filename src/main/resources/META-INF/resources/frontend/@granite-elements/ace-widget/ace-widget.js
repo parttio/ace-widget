@@ -334,8 +334,9 @@ class AceWidget extends PolymerElement {
   }
 
   editorChangeAction() {
-    // console.debug("[ace-widget] editorChangeAction", {value: this.editorValue, oldValue: this._value})
-    this.dispatchEvent(new CustomEvent('editor-content', {detail: {value: this.editorValue, oldValue: this._value}}));
+    // route the change to the backend - Vaadin handles the property change,
+    // no need for a CustomEvent
+    this.value = this.editorValue;
   }
 
   get editorValue() {
@@ -346,8 +347,8 @@ class AceWidget extends PolymerElement {
     if (value === undefined) {
       return;
     }
-    this._value = value;
     this.editor.setValue(value);
+    this.editor.clearSelection();
     // console.debug("[ace-widget] set editorValue", this.editorValue)
   }
 
