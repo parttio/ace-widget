@@ -16,14 +16,12 @@ public class View extends Div {
 		aceEditor.setValue("TEST");
 		aceEditor.setTheme(AceTheme.monokai);
 		aceEditor.setMode(AceMode.xml);
-		//aceEditor.setHeight("500px");
-		//aceEditor.setWidth("500px");
 		aceEditor.setFontSize(20);
 		aceEditor.setReadOnly(false);
 		
 		aceEditor.addValueChangeListener(e ->{
 			//System.out.println(e.getValue());
-			System.out.println("*****");
+			System.out.println("value: " + aceEditor.getValue());
 		});
 
 		// aceEditor.setSofttabs(false);

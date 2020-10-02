@@ -1,16 +1,10 @@
 package com.hilerio.ace;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.hilerio.ace.AceMode;
-import com.hilerio.ace.AceTheme;
 
 /**
  * @author: Sergio Alberto Hilerio.
@@ -21,21 +15,10 @@ import com.hilerio.ace.AceTheme;
 @JsModule("./@granite-elements/ace-widget/ace-widget.js")
 public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
-	@Id("editor")
-	private Div editor;
+	private static final String VALUE_PROPERTY = "value";
 
 	public AceEditor() {
-		super("value", "", false);
-	}
-
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
-		addListener(ChangeEvent.class, this::updateValue);
-	}
-
-	public void updateValue(ChangeEvent event) {
-		setValue(event.getValue());
+		super(VALUE_PROPERTY, "", false);
 	}
 
 	/**
@@ -62,15 +45,14 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * Cleans the value contained in the editor.
 	 */
 	public void clear() {
-		getElement().setProperty("value", "");
+		getElement().setProperty(VALUE_PROPERTY, "");
 	}
 
 	/**
 	 * Sets value for the editor.
 	 */
 	public void setValue(String value) {
-		getElement().setProperty("value", value);
-		// fireEvent(new ChangeEvent(this, false));
+		getElement().setProperty(VALUE_PROPERTY, value);
 	}
 
 	/**
@@ -145,38 +127,20 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	/**
 	 * Sets height in px
-	 * 
+	 *
 	 * @param height
 	 */
 	public void setHeight(String height) {
-		editor.getElement().getStyle().set("min-height", height);
-	};
+		getElement().getStyle().set("min-height", height);
+	}
 
 	/**
 	 * Sets width in px or pixels
-	 * 
+	 *
 	 * @param width
 	 */
 	public void setWidth(String width) {
-		editor.getElement().getStyle().set("max-width", width);
-	};
-
-	/**
-	 * Returns the current value of the editor.
-	 * 
-	 * @return the current value.
-	 */
-	@Synchronize(value = { "editor-content" })
-	public String getValue() {
-		return getElement().getProperty("value");
+		getElement().getStyle().set("max-width", width);
 	}
 
-	// public void addValueChangeListener(ValueChangeListener listener) {
-	// this.getElement().addEventListener("editor-content", args ->
-	// listener.valueChanged(this));
-	// }
-	//
-	// public static interface ValueChangeListener {
-	// public void valueChanged(AceEditor juicyAceEditor);
-	// }
 }
