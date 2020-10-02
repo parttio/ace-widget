@@ -1,5 +1,3 @@
-package com.hilerio.ace;
-
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;

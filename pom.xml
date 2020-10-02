@@ -6,6 +6,7 @@
 
 	<groupId>com.hilerio</groupId>
 	<artifactId>ace-widget</artifactId>
+
 	<version>1.4.2-Beta</version>
 	<name>ace-widget</name>
 	<description>Integration of ace-widget for Vaadin platform</description>
