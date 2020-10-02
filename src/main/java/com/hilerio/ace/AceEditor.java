@@ -1,10 +1,12 @@
-package com.hilerio.ace;
-
 import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.polymertemplate.Id;
 
 /**
  * @author: Sergio Alberto Hilerio.
@@ -15,17 +17,28 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 @JsModule("./@granite-elements/ace-widget/ace-widget.js")
 public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
-	private static final String VALUE_PROPERTY = "value";
+	@Id("editor")
+	private Div editor;
 
 	public AceEditor() {
-		super(VALUE_PROPERTY, "", false);
+		super("value", "", false);
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		addListener(BlurChanged.class, this::updateText);
+	}
+	
+	// Updates the Text after the Blur event has been fired (Keyboard lost focus)
+	private void updateText(BlurChanged event) {
+		setValue(event.getValue());
 	}
 
 	/**
 	 * Sets the mode(language) of the editor.
 	 *
-	 * @param mode
-	 *            mode(language)
+	 * @param mode mode(language)
 	 */
 	public void setMode(AceMode mode) {
 		getElement().setAttribute("mode", "ace/mode/" + mode);
@@ -34,8 +47,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	/**
 	 * Sets the theme (style) of the editor.
 	 *
-	 * @param theme
-	 *            theme(style)
+	 * @param theme theme(style)
 	 */
 	public void setTheme(AceTheme theme) {
 		getElement().setAttribute("theme", "ace/theme/" + theme);
@@ -45,14 +57,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * Cleans the value contained in the editor.
 	 */
 	public void clear() {
-		getElement().setProperty(VALUE_PROPERTY, "");
+		getElement().setProperty("value", "");
 	}
 
 	/**
 	 * Sets value for the editor.
+	 * 
+	 * @return
 	 */
 	public void setValue(String value) {
-		getElement().setProperty(VALUE_PROPERTY, value);
+		getElement().setProperty("value", value);
 	}
 
 	/**
@@ -127,20 +141,28 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	/**
 	 * Sets height in px
-	 *
+	 * 
 	 * @param height
 	 */
 	public void setHeight(String height) {
 		getElement().getStyle().set("min-height", height);
-	}
+	};
 
 	/**
 	 * Sets width in px or pixels
-	 *
+	 * 
 	 * @param width
 	 */
 	public void setWidth(String width) {
 		getElement().getStyle().set("max-width", width);
+	};
+	
+	/**
+	 * Sets BasePath / BaseUrl
+	 * 
+	 * @param baseurl
+	 */
+	public void setBasePath(String baseurl) {
+		getElement().setAttribute("baseUrl", baseurl);
 	}
-
 }
