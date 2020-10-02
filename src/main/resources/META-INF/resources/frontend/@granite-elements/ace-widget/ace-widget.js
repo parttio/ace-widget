@@ -17,25 +17,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /* globals ace */
 /* eslint new-cap: ["error", { "capIsNewExceptions": ["AceWidgetShadowDom"] }] */
 
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
 
+import "ace-builds/src-noconflict/ace.js";
+import "ace-builds/src-noconflict/ext-language_tools.js";
+import "ace-builds/src-noconflict/snippets/snippets.js";
 
-import 'ace-builds/src-noconflict/ace.js';
-import 'ace-builds/src-noconflict/ext-language_tools.js';
-import 'ace-builds/src-noconflict/snippets/snippets.js';
-
-
-var editorFocus = function() { 
+var editorFocus = function () {
   var _self = this;
-  setTimeout(function() {
-      if (!_self.isFocused())
-          _self.textInput.focus();
+  setTimeout(function () {
+    if (!_self.isFocused()) _self.textInput.focus();
   });
-  this.textInput.$focusScroll = "browser"
+  this.textInput.$focusScroll = "browser";
   this.textInput.focus();
 };
-
-
 
 class AceWidget extends PolymerElement {
   static get template() {
@@ -45,7 +40,7 @@ class AceWidget extends PolymerElement {
           display: block;
           width: 100%;
         }
-    
+
         #editor {
           border: 1px solid #e3e3e3;
           border-radius: 4px;
@@ -56,49 +51,51 @@ class AceWidget extends PolymerElement {
     `;
   }
 
-  static get is() { return 'ace-widget'; }
+  static get is() {
+    return "ace-widget";
+  }
 
   static get properties() {
     return {
       theme: {
         type: String,
-        value: 'ace/theme/eclipse',
-        observer: 'themeChanged',
+        value: "ace/theme/eclipse",
+        observer: "themeChanged",
       },
       mode: {
         type: String,
         notify: true,
-        observer: 'modeChanged',
+        observer: "modeChanged",
       },
       value: {
         type: String,
         notify: true,
-        observer: 'valueChanged',
+        observer: "valueChanged",
       },
       readonly: {
         type: Boolean,
         value: false,
-        observer: 'readonlyChanged',
+        observer: "readonlyChanged",
       },
       softtabs: {
         type: Boolean,
         value: true,
-        observer: 'softtabsChanged',
+        observer: "softtabsChanged",
       },
       wrap: {
         type: Boolean,
         value: false,
-        observer: 'wrapChanged',
+        observer: "wrapChanged",
       },
       fontSize: {
         type: String,
-//        value: '14px',
-        observer: 'fontSizeChanged',
+        value: "14px",
+        observer: "fontSizeChanged",
       },
       tabSize: {
         type: Number,
         value: 4,
-        observer: 'tabSizeChanged',
+        observer: "tabSizeChanged",
       },
       snippets: {
         type: String,
@@ -130,7 +127,7 @@ class AceWidget extends PolymerElement {
       },
       placeholder: {
         type: String,
-        value: '',
+        value: "",
       },
       verbose: {
         type: Boolean,
@@ -138,13 +135,12 @@ class AceWidget extends PolymerElement {
       },
       baseUrl: {
         type: String,
-        value: '',
+        value: "",
       },
     };
   }
 
-
-  /** 
+  /**
    * In order to statically import non ES mudules resources, you need to use `importPath`.
    * But in order to use `importPath`, for elements defined in ES modules, users should implement
    * `static get importMeta() { return import.meta; }`, and the default
@@ -155,10 +151,11 @@ class AceWidget extends PolymerElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    let baseUrl = this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`
+    let baseUrl =
+      this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`;
 
     // In non-minified mode, imports are parallelized, and sometimes `ext-language_tools.js` and
-    // `snippets.js` arrive before `ace.js` is ready. I am adding some tests here with dynamic imports 
+    // `snippets.js` arrive before `ace.js` is ready. I am adding some tests here with dynamic imports
     // to fix thaty
     if (!ace) {
       await import(`${baseUrl}ace.js`);
@@ -166,16 +163,20 @@ class AceWidget extends PolymerElement {
     if (!ace.require("ace/ext/language_tools")) {
       await import(`${baseUrl}ext-language_tools.js`);
     }
-    
+
     // console.debug("[ace-widget] connectedCallback")
     let div = this.$.editor;
-    div.style.width = '100%';
-    div.style.height = '100%';
+    div.style.width = "100%";
+    div.style.height = "100%";
     this.editor = ace.edit(div);
     this.editor.focus = editorFocus;
     //this.init();
 
-    this.dispatchEvent(new CustomEvent('editor-ready', { detail: {value: this.editor, oldValue: null}}));
+    this.dispatchEvent(
+      new CustomEvent("editor-ready", {
+        detail: { value: this.editor, oldValue: null },
+      })
+    );
     // console.debug("[ace-widget] connectedCallback done, initializing")
     this.initializeEditor();
   }
@@ -186,25 +187,25 @@ class AceWidget extends PolymerElement {
 
     this.head = document.head;
 
+    this.injectStyle("#ace_editor\\.css");
 
-    this.injectStyle('#ace_editor\\.css');
+    let baseUrl =
+      this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`;
 
-    let baseUrl = this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`
-
-    ace.config.set('basePath', baseUrl);
-    ace.config.set('modePath', baseUrl);
-    ace.config.set('themePath', baseUrl);
-    ace.config.set('workerPath', baseUrl);
+    ace.config.set("basePath", baseUrl);
+    ace.config.set("modePath", baseUrl);
+    ace.config.set("themePath", baseUrl);
+    ace.config.set("workerPath", baseUrl);
 
     this.themeChanged();
-    this.editorValue = '';
-    editor.setOption('enableSnippets', this.enableSnippets);
-    editor.setOption('enableBasicAutocompletion', true);
-    editor.setOption('enableLiveAutocompletion', this.enableLiveAutocompletion);
+    this.editorValue = "";
+    editor.setOption("enableSnippets", this.enableSnippets);
+    editor.setOption("enableBasicAutocompletion", true);
+    editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
 
-    editor.on('change', this.editorChangeAction.bind(this));
-    editor.on('input', this._updatePlaceholder.bind(this));
+    editor.on("input", this._updatePlaceholder.bind(this));
     setTimeout(this._updatePlaceholder.bind(this), 100);
+    editor.on("blur", this.editorBlurChangeAction.bind(this));
     this.session = editor.getSession();
 
     if (this.initialFocus) {
@@ -239,19 +240,19 @@ class AceWidget extends PolymerElement {
     }
     // min and max lines
     editor.setOptions({
-        minLines: this.minlines,
-        maxLines: this.maxlines,
+      minLines: this.minlines,
+      maxLines: this.maxlines,
     });
 
     // snippets
     if (this.enableSnippets) {
-      let snippetManager = ace.require('ace/snippets').snippetManager;
-      snippetManager.register(this.snippets, 'javascript');
+      let snippetManager = ace.require("ace/snippets").snippetManager;
+      snippetManager.register(this.snippets, "javascript");
     }
     // autoComplete
-    let langTools = ace.require('ace/ext/language_tools');
+    let langTools = ace.require("ace/ext/language_tools");
     let aceWidgetCompleter = {
-      getCompletions: function(editor, session, pos, prefix, callback) {
+      getCompletions: function (editor, session, pos, prefix, callback) {
         if (prefix.length === 0) {
           callback(null, []);
           return;
@@ -262,11 +263,12 @@ class AceWidget extends PolymerElement {
     langTools.addCompleter(aceWidgetCompleter);
 
     if (this.verbose) {
-      console.debug('[ace-widget] After initializing: editor.getSession().getValue()',
-          editor.getSession().getValue());
+      console.debug(
+        "[ace-widget] After initializing: editor.getSession().getValue()",
+        editor.getSession().getValue()
+      );
     }
   }
-
 
   fontSizeChanged() {
     if (this.editor == undefined) {
@@ -314,7 +316,9 @@ class AceWidget extends PolymerElement {
     this.editor.setReadOnly(this.readonly);
     this.editor.setHighlightActiveLine(!this.readonly);
     this.editor.setHighlightGutterLine(!this.readonly);
-    this.editor.renderer.$cursorLayer.element.style.opacity = this.readonly ? 0 : 1;
+    this.editor.renderer.$cursorLayer.element.style.opacity = this.readonly
+      ? 0
+      : 1;
   }
 
   wrapChanged() {
@@ -333,11 +337,6 @@ class AceWidget extends PolymerElement {
     }
   }
 
-  editorChangeAction() {
-    // console.debug("[ace-widget] editorChangeAction", {value: this.editorValue, oldValue: this._value})
-    this.dispatchEvent(new CustomEvent('editor-content', {detail: {value: this.editorValue, oldValue: this._value}}));
-  }
-
   get editorValue() {
     return this.editor.getValue();
   }
@@ -351,6 +350,16 @@ class AceWidget extends PolymerElement {
     // console.debug("[ace-widget] set editorValue", this.editorValue)
   }
 
+  editorBlurChangeAction() {
+    if (this.editorValue != this.value) {
+      this.dispatchEvent(
+        new CustomEvent("editor-content", {
+          detail: { value: this.editorValue, oldValue: this._value },
+        })
+      );
+    }
+  }
+
   focus() {
     this.editor.focus();
   }
@@ -359,26 +368,33 @@ class AceWidget extends PolymerElement {
     let shouldShow = !this.editor.session.getValue().length;
     let node = this.editor.renderer.emptyMessageNode;
     if (this.verbose) {
-      console.debug('[ace-widget] _updatePlaceholder', {shouldShow: shouldShow, node: node});
+      console.debug("[ace-widget] _updatePlaceholder", {
+        shouldShow: shouldShow,
+        node: node,
+      });
     }
     if (!shouldShow && node) {
-        this.editor.renderer.scroller.removeChild(this.editor.renderer.emptyMessageNode);
-        this.editor.renderer.emptyMessageNode = null;
+      this.editor.renderer.scroller.removeChild(
+        this.editor.renderer.emptyMessageNode
+      );
+      this.editor.renderer.emptyMessageNode = null;
     } else if (shouldShow && !node) {
-        if (this.verbose) {
-          console.debug('[ace-widget] _updatePlaceholder - shouldShow && !node');
-        }
-        node = this.editor.renderer.emptyMessageNode = document.createElement('div');
-        node.textContent = this.placeholder;
-        node.className = 'ace_comment';
-        node.style.padding = '0 9px';
-        node.style.zIndex = '1';
-        node.style.position = 'absolute';
-        node.style.color = '#aaa';
-        if (this.verbose) {
-          console.debug('[ace-widget] _updatePlaceholder - node', node);
-        }
-        this.editor.renderer.scroller.appendChild(node);
+      if (this.verbose) {
+        console.debug("[ace-widget] _updatePlaceholder - shouldShow && !node");
+      }
+      node = this.editor.renderer.emptyMessageNode = document.createElement(
+        "div"
+      );
+      node.textContent = this.placeholder;
+      node.className = "ace_comment";
+      node.style.padding = "0 9px";
+      node.style.zIndex = "1";
+      node.style.position = "absolute";
+      node.style.color = "#aaa";
+      if (this.verbose) {
+        console.debug("[ace-widget] _updatePlaceholder - node", node);
+      }
+      this.editor.renderer.scroller.appendChild(node);
     }
   }
 
@@ -386,11 +402,12 @@ class AceWidget extends PolymerElement {
    * Injects a style element into ace-widget's shadow root
    * @param {CSSSelector} selector for an element in the same shadow tree or document as `ace-widget`
    */
-  injectStyle(selector){
-    const lightStyle = this.getRootNode().querySelector(selector) || document.querySelector(selector);
+  injectStyle(selector) {
+    const lightStyle =
+      this.getRootNode().querySelector(selector) ||
+      document.querySelector(selector);
     this.shadowRoot.appendChild(lightStyle.cloneNode(true));
   }
 }
 
 window.customElements.define(AceWidget.is, AceWidget);
-
