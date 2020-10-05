@@ -1,3 +1,5 @@
+package com.hilerio.ace;
+
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Focusable;
@@ -163,6 +165,34 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param baseurl
 	 */
 	public void setBasePath(String baseurl) {
-		getElement().setAttribute("baseUrl", baseurl);
+		getElement().setProperty("baseUrl", baseurl);
 	}
+
+	/**
+	 * Sets showPrintMargin for the editor.
+	 */
+	 public void setShowPrintMargin(Boolean value) {
+		 getElement().setProperty("showPrintMargin", value);
+	 }
+
+	/**
+	 * Sets showInvisibles for the editor.
+	 */
+	 public void setShowInvisibles(Boolean value) {
+		 getElement().setProperty("showInvisibles", value);
+	 }
+
+	 /**
+	  * Sets showGutter for the editor.
+	  */
+	 public void setShowGutter(Boolean value) {
+		 getElement().setProperty("showGutter", value);
+	 }
+
+	 /**
+	  * Sets highlightActiveLine for the editor.
+	  */
+	  public void setHighlightActiveLine(Boolean value) {
+		  getElement().setProperty("highlightActiveLine", value);
+	  }
 }

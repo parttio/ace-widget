@@ -132,6 +132,22 @@ class AceWidget extends PolymerElement {
         type: String,
         value: "",
       },
+      showPrintMargin: {
+        type: Boolean,
+        value: false
+      },
+      showInvisibles: {
+        type: Boolean,
+        value: false
+      },
+      showGutter: {
+        type: Boolean,
+        value: true
+      },
+      highlightActiveLine: {
+        type: Boolean,
+        value: true
+      }
     };
   }
 
@@ -186,7 +202,7 @@ class AceWidget extends PolymerElement {
 
     let baseUrl =
       this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`;
-
+    
     ace.config.set("basePath", baseUrl);
     ace.config.set("modePath", baseUrl);
     ace.config.set("themePath", baseUrl);
@@ -218,6 +234,11 @@ class AceWidget extends PolymerElement {
     this.modeChanged();
     this.softtabsChanged();
     this.fontSizeChanged();
+
+    editor.setHighlightActiveLine(this.highlightActiveLine);
+    editor.setShowPrintMargin(this.showPrintMargin);
+    editor.setOption("showGutter", this.showGutter);
+    editor.setShowInvisibles(this.showInvisibles);
 
     // Setting content
 

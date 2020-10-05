@@ -4,21 +4,30 @@ import com.hilerio.ace.AceEditor;
 import com.hilerio.ace.AceMode;
 import com.hilerio.ace.AceTheme;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
 @Route("")
-public class View extends Div {
+public class View extends VerticalLayout {
 
 	public View() {
+		
+		setSizeFull();
 
 		AceEditor aceEditor = new AceEditor();
 
 		aceEditor.setValue("TEST");
-		aceEditor.setTheme(AceTheme.monokai);
+		aceEditor.setTheme(AceTheme.github);
 		aceEditor.setMode(AceMode.xml);
 		aceEditor.setFontSize(20);
-		aceEditor.setReadOnly(false);
+		aceEditor.setHeight("100%");
+		aceEditor.setWidth("100%");
+//		aceEditor.setReadOnly(false);
+//		aceEditor.setBasePath();
+		aceEditor.setHighlightActiveLine(false);
+		aceEditor.setShowInvisibles(true);
+		aceEditor.setShowGutter(false);
+		aceEditor.setShowPrintMargin(false);
 
 //		aceEditor.addValueChangeListener(e -> {
 //			System.out.println(aceEditor.getValue());
@@ -35,9 +44,11 @@ public class View extends Div {
 //		aceEditor.addFocusListener(e -> {
 //		 System.out.println("Focus");
 //		});
-
+		
 		add(aceEditor, new Button("demo", e -> {
 			System.out.println(aceEditor.getValue());
 		}));
+		
+		expand(aceEditor);
 	}
 }
