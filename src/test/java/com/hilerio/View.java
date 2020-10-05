@@ -17,17 +17,17 @@ public class View extends VerticalLayout {
 		AceEditor aceEditor = new AceEditor();
 
 		aceEditor.setValue("TEST");
-		aceEditor.setTheme(AceTheme.github);
-		aceEditor.setMode(AceMode.xml);
+		aceEditor.setTheme(AceTheme.terminal);
+		aceEditor.setMode(AceMode.java);
 		aceEditor.setFontSize(20);
 		aceEditor.setHeight("100%");
 		aceEditor.setWidth("100%");
 //		aceEditor.setReadOnly(false);
 //		aceEditor.setBasePath();
-		aceEditor.setHighlightActiveLine(false);
-		aceEditor.setShowInvisibles(true);
-		aceEditor.setShowGutter(false);
-		aceEditor.setShowPrintMargin(false);
+//		aceEditor.setHighlightActiveLine(false);
+//		aceEditor.setShowInvisibles(true);
+//		aceEditor.setShowGutter(false);
+//		aceEditor.setShowPrintMargin(false);
 
 //		aceEditor.addValueChangeListener(e -> {
 //			System.out.println(aceEditor.getValue());

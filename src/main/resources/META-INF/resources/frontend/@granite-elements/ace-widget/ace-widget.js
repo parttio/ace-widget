@@ -106,7 +106,7 @@ class AceWidget extends PolymerElement {
       },
       maxlines: {
         type: Number,
-        value: 30,
+        value: { Infinity },
       },
       enableLiveAutocompletion: {
         type: Boolean,
@@ -134,19 +134,19 @@ class AceWidget extends PolymerElement {
       },
       showPrintMargin: {
         type: Boolean,
-        value: false
+        value: false,
       },
       showInvisibles: {
         type: Boolean,
-        value: false
+        value: false,
       },
       showGutter: {
         type: Boolean,
-        value: true
+        value: true,
       },
       highlightActiveLine: {
         type: Boolean,
-        value: true
+        value: true,
       }
     };
   }

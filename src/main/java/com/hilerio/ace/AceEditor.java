@@ -147,7 +147,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param height
 	 */
 	public void setHeight(String height) {
-		getElement().getStyle().set("min-height", height);
+		getElement().getStyle().set("height", height);
 	};
 
 	/**
@@ -156,7 +156,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param width
 	 */
 	public void setWidth(String width) {
-		getElement().getStyle().set("max-width", width);
+		getElement().getStyle().set("width", width);
 	};
 	
 	/**
