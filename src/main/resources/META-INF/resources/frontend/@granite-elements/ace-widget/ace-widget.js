@@ -147,7 +147,24 @@ class AceWidget extends PolymerElement {
       highlightActiveLine: {
         type: Boolean,
         value: true,
-      }
+      },
+      displayIndentGuides: {
+        type: Boolean,
+        value: false,
+      },
+      highlightSelectedWord: {
+        type: Boolean,
+        value: false,
+      },
+      selection: {
+        type: String,
+        value: "-|-",
+        observer: "selectionChanged",
+      },
+      useWorker: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -202,7 +219,7 @@ class AceWidget extends PolymerElement {
 
     let baseUrl =
       this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`;
-    
+
     ace.config.set("basePath", baseUrl);
     ace.config.set("modePath", baseUrl);
     ace.config.set("themePath", baseUrl);
@@ -234,11 +251,15 @@ class AceWidget extends PolymerElement {
     this.modeChanged();
     this.softtabsChanged();
     this.fontSizeChanged();
+    this.selectionChanged();
 
     editor.setHighlightActiveLine(this.highlightActiveLine);
     editor.setShowPrintMargin(this.showPrintMargin);
     editor.setOption("showGutter", this.showGutter);
     editor.setShowInvisibles(this.showInvisibles);
+    editor.setDisplayIndentGuides(this.displayIndentGuides);
+    editor.setHighlightSelectedWord(this.highlightSelectedWord);
+    editor.getSession().setUseWorker(this.useWorker);
 
     // Setting content
 
@@ -351,6 +372,23 @@ class AceWidget extends PolymerElement {
     if (this.tabSize) {
       this.editor.getSession().setTabSize(this.tabSize);
     }
+  }
+
+  selectionChanged() {
+    if (this.editor == undefined) {
+      return;
+    }
+
+    if (this.selection == "-|-") {
+      return;
+    }
+
+    const selection = this.selection;
+    const selectionFrom = parseInt(selection.split("|")[0]);
+    const selectionTo = parseInt(selection.split("|")[1]);
+
+    const Range = ace.require("ace/range").Range;
+    this.editor.selection.setRange(new Range(0, selectionFrom, 0, selectionTo));
   }
 
   get editorValue() {

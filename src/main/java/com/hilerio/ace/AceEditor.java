@@ -31,7 +31,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		super.onAttach(attachEvent);
 		addListener(BlurChanged.class, this::updateText);
 	}
-	
+
 	// Updates the Text after the Blur event has been fired (Keyboard lost focus)
 	private void updateText(BlurChanged event) {
 		setValue(event.getValue());
@@ -142,21 +142,21 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	}
 
 	/**
-	 * Sets height in px
+	 * Sets height in px/pixel or percent
 	 * 
 	 * @param height
 	 */
 	public void setHeight(String height) {
-		getElement().getStyle().set("height", height);
+		getElement().getStyle().set("max-height", height);
 	};
 
 	/**
-	 * Sets width in px or pixels
+	 * Sets width in px/pixel or percent
 	 * 
 	 * @param width
 	 */
-	public void setWidth(String width) {
-		getElement().getStyle().set("width", width);
+	public void setWidth(String width) {		
+		getElement().getStyle().set("max-width", width);
 	};
 	
 	/**
@@ -171,28 +171,63 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	/**
 	 * Sets showPrintMargin for the editor.
 	 */
-	 public void setShowPrintMargin(Boolean value) {
-		 getElement().setProperty("showPrintMargin", value);
-	 }
+	public void setShowPrintMargin(Boolean value) {
+		getElement().setProperty("showPrintMargin", value);
+	}
 
 	/**
 	 * Sets showInvisibles for the editor.
 	 */
-	 public void setShowInvisibles(Boolean value) {
-		 getElement().setProperty("showInvisibles", value);
-	 }
+	public void setShowInvisibles(Boolean value) {
+		getElement().setProperty("showInvisibles", value);
+	}
 
-	 /**
-	  * Sets showGutter for the editor.
-	  */
-	 public void setShowGutter(Boolean value) {
-		 getElement().setProperty("showGutter", value);
-	 }
+	/**
+	 * Sets showGutter for the editor.
+	 */
+	public void setShowGutter(Boolean value) {
+		getElement().setProperty("showGutter", value);
+	}
 
-	 /**
-	  * Sets highlightActiveLine for the editor.
-	  */
-	  public void setHighlightActiveLine(Boolean value) {
-		  getElement().setProperty("highlightActiveLine", value);
-	  }
+	/**
+	 * Sets highlightActiveLine for the editor.
+	 */
+	public void setHighlightActiveLine(Boolean value) {
+		getElement().setProperty("highlightActiveLine", value);
+	}
+
+	/**
+	 * Sets displayIndentGuides for the editor.
+	 */
+	public void setDisplayIndentGuides(Boolean value) {
+		getElement().setProperty("displayIndentGuides", value);
+	}
+
+	/**
+	 * Sets highlightSelectedWord for the editor.
+	 */
+	public void setHighlightSelectedWord(Boolean value) {
+		getElement().setProperty("highlightSelectedWord", value);
+	}
+
+	/*
+	 * Sets selection for the editor.
+	 */
+	public void setSelection(Integer from, Integer to) {
+		getElement().setProperty("selection", from + "|" + to);
+	}
+
+	/*
+	 * Sets useWorker for the editor.
+	 */
+	public void setUseWorker(Boolean value) {
+		getElement().setProperty("useWorker", value);
+	}
+
+	/*
+	 * Sets cursorPosition for the editor.
+	 */
+	public void setCursorPosition(Integer pos) {
+		getElement().setProperty("selection", pos + "|" + pos);
+	}
 }
