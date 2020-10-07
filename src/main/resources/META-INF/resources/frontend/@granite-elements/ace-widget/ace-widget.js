@@ -37,8 +37,8 @@ class AceWidget extends PolymerElement {
           width: 100%;
         }
         #editor {
-          border: 1px solid #e3e3e3;
-          border-radius: 4px;
+          border: 1px solid var(--lumo-contrast-20pct);
+          border-radius: var(--lumo-border-radius-s);
           @apply --ace-widget-editor;
         }
       </style>
@@ -97,7 +97,8 @@ class AceWidget extends PolymerElement {
         notify: true,
       },
       autoComplete: {
-        type: Object,
+        type: String,
+        value: "false",
         notify: true,
       },
       minlines: {
@@ -228,7 +229,7 @@ class AceWidget extends PolymerElement {
     this.themeChanged();
     this.editorValue = "";
     editor.setOption("enableSnippets", this.enableSnippets);
-    editor.setOption("enableBasicAutocompletion", true);
+    editor.setOption("enableBasicAutocompletion", this.autoComplete);
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
 
     editor.on("input", this._updatePlaceholder.bind(this));
@@ -286,18 +287,21 @@ class AceWidget extends PolymerElement {
       let snippetManager = ace.require("ace/snippets").snippetManager;
       snippetManager.register(this.snippets, "javascript");
     }
+    
     // autoComplete
-    let langTools = ace.require("ace/ext/language_tools");
-    let aceWidgetCompleter = {
-      getCompletions: function (editor, session, pos, prefix, callback) {
-        if (prefix.length === 0) {
-          callback(null, []);
-          return;
-        }
-        callback(null, self.autoComplete || []);
-      },
-    };
-    langTools.addCompleter(aceWidgetCompleter);
+    if (this.autoComplete.value == "true") {
+      let langTools = ace.require("ace/ext/language_tools");
+      let aceWidgetCompleter = {
+        getCompletions: function (editor, session, pos, prefix, callback) {
+          if (prefix.length === 0) {
+            callback(null, []);
+            return;
+          }
+          callback(null, self.autoComplete || []);
+        },
+      };
+      langTools.addCompleter(aceWidgetCompleter);
+    }
 
     if (this.verbose) {
       console.debug(
