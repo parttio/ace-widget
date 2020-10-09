@@ -276,7 +276,7 @@ class AceWidget extends PolymerElement {
       // Forcing a valueChanged() call, because the initial one din't do anything as editor wasn't created yet
       this.valueChanged();
     }
-    // min and max lines
+    // min and max lines   
     editor.setOptions({
       minLines: this.minlines,
       maxLines: this.maxlines,
@@ -289,7 +289,7 @@ class AceWidget extends PolymerElement {
     }
     
     // autoComplete
-    if (this.autoComplete.value == "true") {
+    if (this.autoComplete == "true") {
       let langTools = ace.require("ace/ext/language_tools");
       let aceWidgetCompleter = {
         getCompletions: function (editor, session, pos, prefix, callback) {
