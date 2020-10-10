@@ -37,8 +37,8 @@ class AceWidget extends PolymerElement {
           width: 100%;
         }
         #editor {
-          border: 1px solid #e3e3e3;
-          border-radius: 4px;
+          border: 1px solid var(--lumo-contrast-20pct);
+          border-radius: var(--lumo-border-radius-s);
           @apply --ace-widget-editor;
         }
       </style>
@@ -97,7 +97,8 @@ class AceWidget extends PolymerElement {
         notify: true,
       },
       autoComplete: {
-        type: Object,
+        type: String,
+        value: "false",
         notify: true,
       },
       minlines: {
@@ -106,7 +107,7 @@ class AceWidget extends PolymerElement {
       },
       maxlines: {
         type: Number,
-        value: 30,
+        value: { Infinity },
       },
       enableLiveAutocompletion: {
         type: Boolean,
@@ -131,6 +132,39 @@ class AceWidget extends PolymerElement {
       baseUrl: {
         type: String,
         value: "",
+      },
+      showPrintMargin: {
+        type: Boolean,
+        value: false,
+      },
+      showInvisibles: {
+        type: Boolean,
+        value: false,
+      },
+      showGutter: {
+        type: Boolean,
+        value: true,
+      },
+      highlightActiveLine: {
+        type: Boolean,
+        value: true,
+      },
+      displayIndentGuides: {
+        type: Boolean,
+        value: false,
+      },
+      highlightSelectedWord: {
+        type: Boolean,
+        value: false,
+      },
+      selection: {
+        type: String,
+        value: "-|-",
+        observer: "selectionChanged",
+      },
+      useWorker: {
+        type: Boolean,
+        value: false,
       },
     };
   }
@@ -195,7 +229,7 @@ class AceWidget extends PolymerElement {
     this.themeChanged();
     this.editorValue = "";
     editor.setOption("enableSnippets", this.enableSnippets);
-    editor.setOption("enableBasicAutocompletion", true);
+    editor.setOption("enableBasicAutocompletion", this.autoComplete);
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
 
     editor.on("input", this._updatePlaceholder.bind(this));
@@ -218,6 +252,15 @@ class AceWidget extends PolymerElement {
     this.modeChanged();
     this.softtabsChanged();
     this.fontSizeChanged();
+    this.selectionChanged();
+
+    editor.setHighlightActiveLine(this.highlightActiveLine);
+    editor.setShowPrintMargin(this.showPrintMargin);
+    editor.setOption("showGutter", this.showGutter);
+    editor.setShowInvisibles(this.showInvisibles);
+    editor.setDisplayIndentGuides(this.displayIndentGuides);
+    editor.setHighlightSelectedWord(this.highlightSelectedWord);
+    editor.getSession().setUseWorker(this.useWorker);
 
     // Setting content
 
@@ -233,7 +276,7 @@ class AceWidget extends PolymerElement {
       // Forcing a valueChanged() call, because the initial one din't do anything as editor wasn't created yet
       this.valueChanged();
     }
-    // min and max lines
+    // min and max lines   
     editor.setOptions({
       minLines: this.minlines,
       maxLines: this.maxlines,
@@ -244,18 +287,21 @@ class AceWidget extends PolymerElement {
       let snippetManager = ace.require("ace/snippets").snippetManager;
       snippetManager.register(this.snippets, "javascript");
     }
+    
     // autoComplete
-    let langTools = ace.require("ace/ext/language_tools");
-    let aceWidgetCompleter = {
-      getCompletions: function (editor, session, pos, prefix, callback) {
-        if (prefix.length === 0) {
-          callback(null, []);
-          return;
-        }
-        callback(null, self.autoComplete || []);
-      },
-    };
-    langTools.addCompleter(aceWidgetCompleter);
+    if (this.autoComplete == "true") {
+      let langTools = ace.require("ace/ext/language_tools");
+      let aceWidgetCompleter = {
+        getCompletions: function (editor, session, pos, prefix, callback) {
+          if (prefix.length === 0) {
+            callback(null, []);
+            return;
+          }
+          callback(null, self.autoComplete || []);
+        },
+      };
+      langTools.addCompleter(aceWidgetCompleter);
+    }
 
     if (this.verbose) {
       console.debug(
@@ -330,6 +376,23 @@ class AceWidget extends PolymerElement {
     if (this.tabSize) {
       this.editor.getSession().setTabSize(this.tabSize);
     }
+  }
+
+  selectionChanged() {
+    if (this.editor == undefined) {
+      return;
+    }
+
+    if (this.selection == "-|-") {
+      return;
+    }
+
+    const selection = this.selection;
+    const selectionFrom = parseInt(selection.split("|")[0]);
+    const selectionTo = parseInt(selection.split("|")[1]);
+
+    const Range = ace.require("ace/range").Range;
+    this.editor.selection.setRange(new Range(0, selectionFrom, 0, selectionTo));
   }
 
   get editorValue() {

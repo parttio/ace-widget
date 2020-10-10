@@ -15,6 +15,7 @@ public class BlurChanged extends ComponentEvent<AceEditor> {
 
 	public BlurChanged(AceEditor source, boolean fromClient, @EventData("event.detail.value") String value) {
 		super(source, fromClient);
+		source.getElement().setProperty("selection", "-|-"); // Reset the selection so the selection can be set to the same index again
 		this.value = value;
 	}
 
