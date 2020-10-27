@@ -35,6 +35,7 @@ class AceWidget extends PolymerElement {
         :host {
           display: block;
           width: 100%;
+          height: auto;
         }
         #editor {
           border: 1px solid var(--lumo-contrast-20pct);
@@ -54,11 +55,13 @@ class AceWidget extends PolymerElement {
     return {
       theme: {
         type: String,
-        value: "ace/theme/eclipse",
+        value: "eclipse",
+        notify: true,
         observer: "themeChanged",
       },
       mode: {
         type: String,
+        value: "javascript",
         notify: true,
         observer: "modeChanged",
       },
@@ -97,8 +100,7 @@ class AceWidget extends PolymerElement {
         notify: true,
       },
       autoComplete: {
-        type: String,
-        value: "false",
+        type: Object,
         notify: true,
       },
       minlines: {
@@ -110,6 +112,10 @@ class AceWidget extends PolymerElement {
         value: { Infinity },
       },
       enableLiveAutocompletion: {
+        type: Boolean,
+        value: false,
+      },
+      enableAutocompletion: {
         type: Boolean,
         value: false,
       },
@@ -165,6 +171,11 @@ class AceWidget extends PolymerElement {
       useWorker: {
         type: Boolean,
         value: false,
+      },
+      customAutoCompletion: {
+        type: String,
+        value: "",
+        observer: "customAutoCompletionChanged",
       },
     };
   }
@@ -228,8 +239,9 @@ class AceWidget extends PolymerElement {
 
     this.themeChanged();
     this.editorValue = "";
+
     editor.setOption("enableSnippets", this.enableSnippets);
-    editor.setOption("enableBasicAutocompletion", this.autoComplete);
+    editor.setOption("enableBasicAutocompletion", this.enableAutocompletion);
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
 
     editor.on("input", this._updatePlaceholder.bind(this));
@@ -243,7 +255,7 @@ class AceWidget extends PolymerElement {
 
     editor.$blockScrolling = Infinity;
 
-    editor.setTheme(this.theme);
+    editor.setTheme("ace/theme/" + this.theme);
 
     // Forcing a xyzChanged() call, because the initial one din't do anything as editor wasn't created yet
     this.readonlyChanged();
@@ -253,6 +265,7 @@ class AceWidget extends PolymerElement {
     this.softtabsChanged();
     this.fontSizeChanged();
     this.selectionChanged();
+    this.customAutoCompletionChanged();
 
     editor.setHighlightActiveLine(this.highlightActiveLine);
     editor.setShowPrintMargin(this.showPrintMargin);
@@ -276,7 +289,8 @@ class AceWidget extends PolymerElement {
       // Forcing a valueChanged() call, because the initial one din't do anything as editor wasn't created yet
       this.valueChanged();
     }
-    // min and max lines   
+
+    // min and max lines
     editor.setOptions({
       minLines: this.minlines,
       maxLines: this.maxlines,
@@ -285,22 +299,7 @@ class AceWidget extends PolymerElement {
     // snippets
     if (this.enableSnippets) {
       let snippetManager = ace.require("ace/snippets").snippetManager;
-      snippetManager.register(this.snippets, "javascript");
-    }
-    
-    // autoComplete
-    if (this.autoComplete == "true") {
-      let langTools = ace.require("ace/ext/language_tools");
-      let aceWidgetCompleter = {
-        getCompletions: function (editor, session, pos, prefix, callback) {
-          if (prefix.length === 0) {
-            callback(null, []);
-            return;
-          }
-          callback(null, self.autoComplete || []);
-        },
-      };
-      langTools.addCompleter(aceWidgetCompleter);
+      snippetManager.register(this.snippets, "_");
     }
 
     if (this.verbose) {
@@ -320,7 +319,7 @@ class AceWidget extends PolymerElement {
 
   modeChanged() {
     if (!this.editor) return;
-    this.editor.getSession().setMode(this.mode);
+    this.editor.getSession().setMode("ace/mode/" + this.mode);
   }
 
   softtabsChanged() {
@@ -334,7 +333,7 @@ class AceWidget extends PolymerElement {
     if (this.editor == undefined) {
       return;
     }
-    this.editor.setTheme(this.theme);
+    this.editor.setTheme("ace/theme/" + this.theme);
     return;
   }
 
@@ -420,6 +419,34 @@ class AceWidget extends PolymerElement {
 
   focus() {
     this.editor.focus();
+  }
+
+  customAutoCompletionChanged() {
+    if (this.editor == undefined) {
+      return;
+    }
+    let langTools = ace.require("ace/ext/language_tools");
+    const customWords = String(this.customAutoCompletion);
+    if (customWords == "") {
+      langTools.setCompleters([langTools.snippetCompleter, langTools.keyWordCompleter])
+    } else {
+      var staticWordCompleter = {
+        getCompletions: function (editor, session, pos, prefix, callback) {
+          let wordList = customWords.split(",");
+          callback(
+            null,
+            wordList.map(function (word) {
+              return {
+                caption: word,
+                value: word,
+                meta: "custom",
+              };
+            })
+          );
+        },
+      };
+      langTools.setCompleters([staticWordCompleter]);
+    }
   }
 
   _updatePlaceholder() {
