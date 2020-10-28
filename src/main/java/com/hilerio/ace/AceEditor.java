@@ -7,8 +7,10 @@ import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.dom.Element;
 
 /**
  * @author: Sergio Alberto Hilerio.
@@ -21,12 +23,22 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	@Id("editor")
 	private Div editor;
+	
+	private AceTheme editorTheme = AceTheme.eclipse;
+	private AceMode editorMode = AceMode.javascript;
+	private String fontsize = "14px";
+	private boolean softtabs = true;
+	private int tabsize = 4;
+	private boolean wrap = false;
+	private int minlines = 15;
+	private int maxlines = Integer.MAX_VALUE;
+	private String basepath = "";
 
 	public AceEditor() {
 		super("value", "", false);
-		
+
 		setWidth("100%");
-		setHeight("200px");
+		setHeight("300px");
 	}
 
 	@Override
@@ -46,7 +58,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param mode mode(language)
 	 */
 	public void setMode(AceMode mode) {
-		getElement().setAttribute("mode", "ace/mode/" + mode);
+		getElement().setAttribute("mode", mode.toString());
+		this.editorMode = mode;
+	}
+
+	/**
+	 * Returns the current set mode for the editor.
+	 * 
+	 * @return AceMode mode
+	 */
+	public AceMode getMode() {
+		return this.editorMode;
 	}
 
 	/**
@@ -55,7 +77,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param theme theme(style)
 	 */
 	public void setTheme(AceTheme theme) {
-		getElement().setAttribute("theme", "ace/theme/" + theme);
+		getElement().setAttribute("theme", theme.toString());
+	}
+
+	/**
+	 * Returns the current set theme for the editor.
+	 * 
+	 * @return AceTheme theme
+	 */
+	public AceTheme getTheme() {
+		return this.editorTheme;
 	}
 
 	/**
@@ -81,6 +112,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setFontSize(int value) {
 		getElement().setAttribute("font-size", value + "px");
+		this.fontsize = value + "px";
+	}
+	
+	/**
+	 * Returns the current set font-size of the editor in pixels.
+	 * 
+	 * @return String font-size
+	 */
+	public String getFontSize() {
+		return this.fontsize;
 	}
 
 	/**
@@ -89,7 +130,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value boolean
 	 */
 	public void setSofttabs(boolean value) {
-		getElement().setAttribute("softtabs", String.valueOf(value));
+		getElement().setAttribute("softtabs", value);
+		this.softtabs = value;
+	}
+	
+	/**
+	 * Returns if softtabs are currently enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getSofttabs() {
+		return this.softtabs;
 	}
 
 	/**
@@ -99,6 +150,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setTabSize(int value) {
 		getElement().setAttribute("tab-size", String.valueOf(value));
+		this.tabsize = value;
+	}
+	
+	/**
+	 * Returns the current set tab-size for the editor.
+	 * 
+	 * @return int tab-size
+	 */
+	public int getTabSize() {
+		return this.tabsize;
 	}
 
 	/**
@@ -108,15 +169,25 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setWrap(boolean wrap) {
 		getElement().setAttribute("wrap", wrap);
+		this.wrap = wrap;
 	}
 
+	/**
+	 * Returns if wrap is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getWrap() {
+		return this.wrap;
+	}
+	
 	/**
 	 * Sets AutoComplete for the editor.
 	 * 
 	 * @param value boolean
 	 */
 	public void setAutoComplete(boolean value) {
-		getElement().setProperty("autoComplete", String.valueOf(value));
+		getElement().setProperty("enableAutocompletion", value);
 	}
 
 	/**
@@ -126,8 +197,18 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setMinlines(int minlines) {
 		getElement().setAttribute("minlines", String.valueOf(minlines));
+		this.minlines = minlines;
 	}
-
+	
+	/**
+	 * Returns the minimum set lines for the editor.
+	 * 
+	 * @return int minlines
+	 */
+	public int getMinLines() {
+		return this.minlines;
+	}
+	
 	/**
 	 * Sets maxlines for the editor.
 	 * 
@@ -135,8 +216,18 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setMaxlines(int maxlines) {
 		getElement().setAttribute("maxlines", String.valueOf(maxlines));
+		this.maxlines = maxlines;
 	}
 
+	/**
+	 * Return the maximum lines set for the editor.
+	 * 
+	 * @return int maxlines
+	 */
+	public int getMaxLines() {
+		return this.maxlines;
+	}
+	
 	/**
 	 * Sets initialFocus for the editor.
 	 * 
@@ -225,6 +316,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setBasePath(String baseurl) {
 		getElement().setProperty("baseUrl", baseurl);
+		this.basepath = baseurl;
+		
+	};
+
+	/**
+	 * Return the current BasePath / BaseUrl.
+	 * 
+	 * @return String BaseUrl
+	 */
+	public String getBasePath() {
+		return this.basepath;
 	}
 
 	/**
@@ -318,4 +420,29 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		getElement().setProperty("enableLiveAutocompletion", value);
 	}
 
+	/**
+	 * Sets enableSnippets for the editor.
+	 * 
+	 * @param value boolean
+	 */
+	public void setEnableSnippets(boolean value) {
+		getElement().setProperty("enableSnippets", value);
+	}
+	
+	/**
+	 * Sets a custom autocompletion list for the editor.
+	 * 
+	 * @param wordList String[]
+	 */
+	public void setCustomAutoCompletion(String[] wordList) {
+		if (wordList.length == 0) return;
+		getElement().setProperty("customAutoCompletion", String.join(",", wordList));
+	}
+	
+	/**
+	 * Removes the custom autocompletion list set with setCustomAutoCompletiton() and replaces it with the default one.
+	 */
+	public void disableCustomAutoCompletion() {
+		getElement().setProperty("customAutoCompletion", "");
+	}
 }
