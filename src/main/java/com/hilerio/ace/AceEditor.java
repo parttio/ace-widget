@@ -23,16 +23,32 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	@Id("editor")
 	private Div editor;
-	
+
 	private AceTheme editorTheme = AceTheme.eclipse;
 	private AceMode editorMode = AceMode.javascript;
-	private String fontsize = "14px";
-	private boolean softtabs = true;
-	private int tabsize = 4;
+	private String fontSize = "14px";
+	private boolean softTabs = true;
+	private int tabSize = 4;
 	private boolean wrap = false;
-	private int minlines = 15;
-	private int maxlines = Integer.MAX_VALUE;
-	private String basepath = "";
+	private int minLines = 15;
+	private int maxLines = Integer.MAX_VALUE;
+	private String basePath = "";
+	private boolean autoComplete = false;
+	private boolean initialFocus = false;
+	private String placeHolder = "";
+	private boolean readOnly = false;
+	private boolean printMargin = false;
+	private boolean showInvisibles = false;
+	private boolean showGutter = true;
+	private boolean hightlightActiveLine = true;
+	private boolean displayIndentGuides = false;
+	private boolean highlightSelectedWord = false;
+	private int[] selection = new int[] { 0, 0 };
+	private int cursorPosition = 0;
+	private boolean useWorker = false;
+	private boolean liveAutocompletion = false;
+	private boolean enableSnippets = true;
+	private String[] customAutoCompletion = new String[0];
 
 	public AceEditor() {
 		super("value", "", false);
@@ -112,16 +128,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setFontSize(int value) {
 		getElement().setAttribute("font-size", value + "px");
-		this.fontsize = value + "px";
+		this.fontSize = value + "px";
 	}
-	
+
 	/**
 	 * Returns the current set font-size of the editor in pixels.
 	 * 
 	 * @return String font-size
 	 */
 	public String getFontSize() {
-		return this.fontsize;
+		return this.fontSize;
 	}
 
 	/**
@@ -131,16 +147,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setSofttabs(boolean value) {
 		getElement().setAttribute("softtabs", value);
-		this.softtabs = value;
+		this.softTabs = value;
 	}
-	
+
 	/**
 	 * Returns if softtabs are currently enabled/disabled for the editor.
 	 * 
 	 * @return boolean enabled/disabled
 	 */
 	public boolean getSofttabs() {
-		return this.softtabs;
+		return this.softTabs;
 	}
 
 	/**
@@ -150,16 +166,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setTabSize(int value) {
 		getElement().setAttribute("tab-size", String.valueOf(value));
-		this.tabsize = value;
+		this.tabSize = value;
 	}
-	
+
 	/**
 	 * Returns the current set tab-size for the editor.
 	 * 
 	 * @return int tab-size
 	 */
 	public int getTabSize() {
-		return this.tabsize;
+		return this.tabSize;
 	}
 
 	/**
@@ -180,7 +196,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public boolean getWrap() {
 		return this.wrap;
 	}
-	
+
 	/**
 	 * Sets AutoComplete for the editor.
 	 * 
@@ -188,6 +204,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setAutoComplete(boolean value) {
 		getElement().setProperty("enableAutocompletion", value);
+		this.autoComplete = value;
+	}
+
+	/**
+	 * Returns if autocomplete is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getAutoComplete() {
+		return this.autoComplete;
 	}
 
 	/**
@@ -197,18 +223,18 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setMinlines(int minlines) {
 		getElement().setAttribute("minlines", String.valueOf(minlines));
-		this.minlines = minlines;
+		this.minLines = minlines;
 	}
-	
+
 	/**
 	 * Returns the minimum set lines for the editor.
 	 * 
 	 * @return int minlines
 	 */
 	public int getMinLines() {
-		return this.minlines;
+		return this.minLines;
 	}
-	
+
 	/**
 	 * Sets maxlines for the editor.
 	 * 
@@ -216,7 +242,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setMaxlines(int maxlines) {
 		getElement().setAttribute("maxlines", String.valueOf(maxlines));
-		this.maxlines = maxlines;
+		this.maxLines = maxlines;
 	}
 
 	/**
@@ -225,9 +251,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @return int maxlines
 	 */
 	public int getMaxLines() {
-		return this.maxlines;
+		return this.maxLines;
 	}
-	
+
 	/**
 	 * Sets initialFocus for the editor.
 	 * 
@@ -235,6 +261,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setInitialFocus(boolean value) {
 		getElement().setAttribute("initialFocus", value);
+		this.initialFocus = value;
+	}
+
+	/**
+	 * Returns if initial focus is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getInitialFocus() {
+		return this.initialFocus;
 	}
 
 	/**
@@ -244,6 +280,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setPlaceholder(String value) {
 		getElement().setAttribute("placeholder", value);
+		this.placeHolder = value;
+	}
+
+	/**
+	 * Returns the placeholder set for the editor.
+	 * 
+	 * @return String placeholder
+	 */
+	public String getPlaceholder() {
+		return this.placeHolder;
 	}
 
 	/**
@@ -253,10 +299,20 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setReadOnly(boolean value) {
 		getElement().setAttribute("readonly", value);
+		this.readOnly = value;
 	}
 
 	/**
-	 * Sets height in px/pixel or percent
+	 * Returns if readOnly is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getReadOnly() {
+		return this.readOnly;
+	}
+
+	/**
+	 * Sets height in px/pixel or percent.
 	 * 
 	 * @param height String
 	 */
@@ -265,7 +321,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets max-height in px/pixel or percent
+	 * Returns the height set for the editor in px/pixel or percent.
+	 * 
+	 * @return String height
+	 */
+	public String getHeight() {
+		return getElement().getStyle().get("height");
+	}
+
+	/**
+	 * Sets max-height in px/pixel or percent.
 	 * 
 	 * @param height String
 	 */
@@ -274,7 +339,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets min-height in px/pixel or percent
+	 * Returns the max-height set for the editor in px/pixel or percent.
+	 * 
+	 * @return String max-height
+	 */
+	public String getMaxHeight() {
+		return getElement().getStyle().get("max-height");
+	}
+
+	/**
+	 * Sets min-height in px/pixel or percent.
 	 * 
 	 * @param height String
 	 */
@@ -283,7 +357,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets width in px/pixel or percent
+	 * Returns the min-height set for the editor in px/pixel or percent.
+	 * 
+	 * @return String min-height
+	 */
+	public String getMinHeight() {
+		return getElement().getStyle().get("min-height");
+	}
+
+	/**
+	 * Sets width in px/pixel or percent.
 	 * 
 	 * @param width String
 	 */
@@ -292,7 +375,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets max-width in px/pixel or percent
+	 * Returns the width set for the editor in px/pixel or percent.
+	 * 
+	 * @return String width
+	 */
+	public String getWidth() {
+		return getElement().getStyle().get("width");
+	}
+
+	/**
+	 * Sets max-width in px/pixel or percent.
 	 * 
 	 * @param width String
 	 */
@@ -301,7 +393,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets min-width in px/pixel or percent
+	 * Returns the max-width set for the editor in px/pixel or percent.
+	 * 
+	 * @return String max-width
+	 */
+	public String getMaxWidth() {
+		return getElement().getStyle().get("max-width");
+	}
+
+	/**
+	 * Sets min-width in px/pixel or percent.
 	 * 
 	 * @param width String
 	 */
@@ -310,14 +411,23 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
-	 * Sets BasePath / BaseUrl
+	 * Returns the min-width set for the editor in px/pixel or percent.
+	 * 
+	 * @return String min-width
+	 */
+	public String getMinWidth() {
+		return getElement().getStyle().get("min-width");
+	}
+
+	/**
+	 * Sets BasePath / BaseUrl.
 	 * 
 	 * @param baseurl String
 	 */
 	public void setBasePath(String baseurl) {
 		getElement().setProperty("baseUrl", baseurl);
-		this.basepath = baseurl;
-		
+		this.basePath = baseurl;
+
 	};
 
 	/**
@@ -326,7 +436,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @return String BaseUrl
 	 */
 	public String getBasePath() {
-		return this.basepath;
+		return this.basePath;
 	}
 
 	/**
@@ -336,6 +446,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setShowPrintMargin(boolean value) {
 		getElement().setProperty("showPrintMargin", value);
+		this.printMargin = value;
+	}
+
+	/**
+	 * Returns if showPrintMargin is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getShowPrintMargin() {
+		return this.printMargin;
 	}
 
 	/**
@@ -345,6 +465,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setShowInvisibles(boolean value) {
 		getElement().setProperty("showInvisibles", value);
+		this.showInvisibles = value;
+	}
+
+	/**
+	 * Returns if showInvisibles is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getShowInvisibles() {
+		return this.showInvisibles;
 	}
 
 	/**
@@ -354,6 +484,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setShowGutter(boolean value) {
 		getElement().setProperty("showGutter", value);
+		this.showGutter = value;
+	}
+
+	/**
+	 * Returns if showGutter is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getShowGutter() {
+		return this.showGutter;
 	}
 
 	/**
@@ -363,6 +503,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setHighlightActiveLine(boolean value) {
 		getElement().setProperty("highlightActiveLine", value);
+		this.hightlightActiveLine = value;
+	}
+
+	/**
+	 * Returns if hightlightActiveLine is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getHightlightActiveLine() {
+		return this.hightlightActiveLine;
 	}
 
 	/**
@@ -372,6 +522,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setDisplayIndentGuides(boolean value) {
 		getElement().setProperty("displayIndentGuides", value);
+		this.displayIndentGuides = value;
+	}
+
+	/**
+	 * Returns if displayIndentGuides is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getDisplayIndentGuides() {
+		return this.displayIndentGuides;
 	}
 
 	/**
@@ -381,6 +541,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setHighlightSelectedWord(boolean value) {
 		getElement().setProperty("highlightSelectedWord", value);
+		this.highlightSelectedWord = value;
+	}
+
+	/**
+	 * Returns if hightlightSelectedWord is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getHightlightSelectedWord() {
+		return this.highlightSelectedWord;
 	}
 
 	/**
@@ -390,7 +560,57 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param to   int
 	 */
 	public void setSelection(int from, int to) {
+		if (to < 0) {
+			to = 0;
+		}
+		if (to < from) {
+			int tmp = from;
+			from = to;
+			to = tmp;
+		}
+		if (from > getValue().length() - 1) {
+			from = getValue().length() - 1;
+		}
 		getElement().setProperty("selection", from + "|" + to);
+		this.selection = new int[] { from, to };
+		this.cursorPosition = to;
+	}
+
+	/**
+	 * Sets selection for the editor and optionally also sets the focus.
+	 * 
+	 * @param from  int
+	 * @param to    int
+	 * @param focus boolean
+	 */
+	public void setSelection(int from, int to, boolean focus) {
+		if (to < 0) {
+			to = 0;
+		}
+		if (to < from) {
+			int tmp = from;
+			from = to;
+			to = tmp;
+		}
+		if (from > getValue().length() - 1) {
+			from = getValue().length() - 1;
+		}
+		getElement().setProperty("selection", from + "|" + to);
+		this.selection = new int[] { from, to };
+		this.cursorPosition = to;
+		if (focus) {
+			this.focus();
+		}
+	}
+
+	/**
+	 * Returns an int array of the current selection where the first index
+	 * represents "from" and the second index "to".
+	 * 
+	 * @return int[] selection
+	 */
+	public int[] getSelection() {
+		return this.selection;
 	}
 
 	/**
@@ -400,6 +620,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setUseWorker(boolean value) {
 		getElement().setProperty("useWorker", value);
+		this.useWorker = value;
+	}
+
+	/**
+	 * Returns if useWorker is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getUseWorker() {
+		return this.useWorker;
 	}
 
 	/**
@@ -408,7 +638,37 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param pos int
 	 */
 	public void setCursorPosition(int pos) {
+		if (pos > getValue().length() - 1) {
+			pos = getValue().length() - 1;
+		}
 		getElement().setProperty("selection", pos + "|" + pos);
+		this.cursorPosition = pos;
+	}
+
+	/**
+	 * Sets cursorPosition for the editor and optionally also sets the focus.
+	 * 
+	 * @param pos   int
+	 * @param focus boolean
+	 */
+	public void setCursorPosition(int pos, boolean focus) {
+		if (pos > getValue().length() - 1) {
+			pos = getValue().length() - 1;
+		}
+		getElement().setProperty("selection", pos + "|" + pos);
+		this.cursorPosition = pos;
+		if (focus) {
+			this.focus();
+		}
+	}
+
+	/**
+	 * Returns the current set cursor position in the editor.
+	 * 
+	 * @return int position
+	 */
+	public int getCursorPosition() {
+		return this.cursorPosition;
 	}
 
 	/**
@@ -418,6 +678,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setLiveAutocompletion(boolean value) {
 		getElement().setProperty("enableLiveAutocompletion", value);
+		this.liveAutocompletion = value;
+	}
+
+	/**
+	 * Returns if live autocompletion is enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getLiveAutocompletion() {
+		return this.liveAutocompletion;
 	}
 
 	/**
@@ -427,22 +697,94 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void setEnableSnippets(boolean value) {
 		getElement().setProperty("enableSnippets", value);
+		this.enableSnippets = value;
 	}
-	
+
+	/**
+	 * Returns if snippets are enabled/disabled for the editor.
+	 * 
+	 * @return boolean enabled/disabled
+	 */
+	public boolean getEnableSnippets() {
+		return this.enableSnippets;
+	}
+
 	/**
 	 * Sets a custom autocompletion list for the editor.
 	 * 
 	 * @param wordList String[]
 	 */
 	public void setCustomAutoCompletion(String[] wordList) {
-		if (wordList.length == 0) return;
+		if (wordList.length == 0) {
+			this.customAutoCompletion = new String[0];
+			return;
+		}
 		getElement().setProperty("customAutoCompletion", String.join(",", wordList));
+		this.customAutoCompletion = wordList;
 	}
-	
+
 	/**
-	 * Removes the custom autocompletion list set with setCustomAutoCompletiton() and replaces it with the default one.
+	 * Returns a String array of the current custom autocompletion for the editor.
+	 * 
+	 * @return String[] customAutoCompletion
+	 */
+	public String[] getCustomAutoCompletion() {
+		return this.customAutoCompletion;
+	}
+
+	/**
+	 * Removes the custom autocompletion list set with setCustomAutoCompletiton()
+	 * and replaces it with the default one.
 	 */
 	public void disableCustomAutoCompletion() {
 		getElement().setProperty("customAutoCompletion", "");
+	}
+
+	/**
+	 * Adds text to a specific position of the editor.
+	 * 
+	 * @param text     String
+	 * @param position int
+	 */
+	public void addTextAtPosition(String text, int position) {
+		String currentVal = this.getValue();
+		StringBuilder newVal = new StringBuilder();
+		if (position > currentVal.length()) {
+			position = currentVal.length() - 1;
+		}
+		for (int x = 0; x < currentVal.length(); x++) {
+			newVal.append(currentVal.charAt(x));
+			if (x == position) {
+				newVal.append(text);
+			}
+		}
+		this.setValue(newVal.toString());
+	}
+
+	/**
+	 * Adds text at the current position of the editor. First Priority: If there is
+	 * a selection, the selection will be replaced. Second Priority: If the cursor
+	 * position has been set, the text will be added at the position of the cursor.
+	 * Third/Last Priority: If no text is selected and the cursor has not been set,
+	 * the text will be added to the end of the text.
+	 * 
+	 * @param text String
+	 */
+	public void addTextAtCurrentPosition(String text) {
+		String currentVal = this.getValue();
+		if (this.selection != new int[] { 0, 0 }) {
+			int from = this.selection[0];
+			int to = this.selection[1];
+			String toReplace = currentVal.substring(from, to);
+			String newVal = currentVal.replace(toReplace, text);
+			this.setValue(newVal);
+			this.selection = new int[] { 0, 0 };
+		} else if (this.cursorPosition != 0) {
+			addTextAtPosition(text, this.cursorPosition);
+			this.cursorPosition = 0;
+		} else {
+			addTextAtPosition(text, currentVal.length() - 1);
+		}
+		this.blur(); // To force the exchange between client and server.
 	}
 }
