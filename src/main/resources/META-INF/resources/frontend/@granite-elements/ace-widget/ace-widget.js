@@ -408,13 +408,11 @@ class AceWidget extends PolymerElement {
   }
 
   editorBlurChangeAction() {
-    if (this.editorValue != this.value) {
-      this.dispatchEvent(
-        new CustomEvent("editor-content", {
-          detail: { value: this.editorValue, oldValue: this._value },
-        })
-      );
-    }
+    this.dispatchEvent(
+      new CustomEvent("editor-content", {
+        detail: { value: this.editorValue, oldValue: this._value },
+      })
+    );
   }
 
   focus() {
@@ -428,7 +426,10 @@ class AceWidget extends PolymerElement {
     let langTools = ace.require("ace/ext/language_tools");
     const customWords = String(this.customAutoCompletion);
     if (customWords == "") {
-      langTools.setCompleters([langTools.snippetCompleter, langTools.keyWordCompleter])
+      langTools.setCompleters([
+        langTools.snippetCompleter,
+        langTools.keyWordCompleter,
+      ]);
     } else {
       var staticWordCompleter = {
         getCompletions: function (editor, session, pos, prefix, callback) {
