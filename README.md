@@ -1,3 +1,5 @@
+*I will include a full documentation on the usage of the widget as soon as v1.5.0 is released (very soon).*
+
 # Ace Editor Vaadin v14
 
 Vaadin 14 Java integration of @polymer/paper-slider
