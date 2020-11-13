@@ -1,77 +1,31 @@
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/LostInBrittanyace-widget)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/LostInBrittanyace-widget.svg)](https://vaadin.com/directory/component/LostInBrittanyace-widget)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/LostInBrittany/ace-widget)  
-
-# ace-widget #
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/ace-widget1)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/ace-widget1.svg)](https://vaadin.com/directory/component/ace-widget1)
+# ace-widget backend #
 
 Even <strong>more</strong> embeddable code editor
 Custom Element - just one tag, and no JS needed to provide
 [Ace](http://ace.c9.io/) - The High Performance Code Editor
 
-> Originally based on [pjako's fork](https://github.com/pjako/ace-element)
-> of [PolymerLabs ace-element](https://github.com/PolymerLabs/ace-element).
->
-
-> Polymer 3.x. element
-> The legacy Polymer 2.x version is available [here](https://www.webcomponents.org/element/LostInBrittany/ace-widget/)
-
-## Doc and demo
-
-https://lostinbrittany.github.io/ace-widget/
-
-
-## Usage example
-
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="./@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="../../@granite-elements/ace-widget/ace-widget.js"></script>
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
-```html
-  <ace-widget placeholder="Write something... Anything..." initial-focus>
-  </ace-widget>
-```
+> Originally based on [LostInBrittany's fork](https://github.com/LostInBrittany/ace-widget)
+> of [PolymerLabs ace-element](https://github.com/PolymerLabs/ace-element)
 
 
 ## Install
 
+Install the component using [Vaadin Directory](https://vaadin.com/directory/component/ace-widget1):
 
-Install the component using [npm](https://www.npmjs.com/):
+```xml
+<dependency>
+   <groupId>com.hilerio</groupId>
+   <artifactId>ace-widget</artifactId>
+   <version>--VERSION HERE--</version>
+</dependency>
 
-```sh
-$ npm i @granite-elements/ace-widget --save
+<repository>
+   <id>vaadin-addons</id>
+   <url>https://maven.vaadin.com/vaadin-addons</url>
+</repository>
 ```
-
-Once installed, import it in your application:
-
-import '@granite-elements/ace-widget/ace-widget.js';
-
-
-
-## Running demos and tests in browser
-
-1. Fork the `ace-widget` repository and clone it locally.
-
-1. Make sure you have [npm](https://www.npmjs.com/) 
-and the [Polymer CLI](https://www.polymer-project.org/3.0/docs/tools/polymer-cli) installed.
-
-1. When in the `ace-widget` directory, run `npm install` to install dependencies.
-
-1. Serve the project using Polyumer CLI:
-
-    `polymer serve --npm`
-
-1. Open the demo in the browser
-
-    - http://127.0.0.1:8080/components/@greanite-elements/ace-widget/demo
-
 
 ## Attributes
 

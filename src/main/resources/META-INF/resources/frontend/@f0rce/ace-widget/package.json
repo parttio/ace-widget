@@ -1,56 +1,6 @@
 {
-  "_args": [
-    [
-      "@f0rce/ace-widget@3.0.1",
-      "C:\\Users\\darsisit\\Desktop\\sergio\\apps\\addonsVaadin\\aceeditor"
-    ]
-  ],
-  "_from": "@f0rce/ace-widget@3.0.1",
-  "_id": "@f0rce/ace-widget@3.0.1",
-  "_inBundle": false,
-  "_integrity": "sha512-e+PA96AUAtUu69TKrTZzOyrjPG068yL/KGNViRkpxubdJ3V6j9wcuIfMYy13Dqa7PvxOVPZZwjYOnWPgaE8j5Q==",
-  "_location": "/@f0rce/ace-widget",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "@f0rce/ace-widget@3.0.1",
-    "name": "@f0rce/ace-widget",
-    "escapedName": "@f0rce%2face-widget",
-    "scope": "@f0rce",
-    "rawSpec": "3.0.1",
-    "saveSpec": null,
-    "fetchSpec": "3.0.1"
-  },
-  "_requiredBy": [
-    "/@vaadin/flow-deps"
-  ],
-  "_resolved": "https://registry.npmjs.org/@f0rce/ace-widget/-/ace-widget-3.0.1.tgz",
-  "_spec": "3.0.1",
-  "_where": "C:\\Users\\darsisit\\Desktop\\sergio\\apps\\addonsVaadin\\aceeditor",
-  "author": {
-    "name": "Horacio Gonzalez",
-    "email": "horacio.gonzalez@gmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/LostInBrittany/ace-widget/issues"
-  },
-  "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@f0rce/ace-builds": "^1.4.12"
-  },
-  "description": "LostInBrittany's Ace (http://ace.c9.io/) widget",
-  "devDependencies": {
-    "@polymer/iron-component-page": "^3.0.0-pre.18",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.18",
-    "@polymer/iron-icon": "^3.0.0-pre.18",
-    "@polymer/iron-icons": "^3.0.0-pre.18",
-    "@polymer/iron-test-helpers": "^3.0.0-pre.18",
-    "@polymer/test-fixture": "^3.0.0-pre.18",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "wct-browser-legacy": "^0.0.1-pre.11"
-  },
-  "homepage": "https://github.com/F0rce/ace-widget",
+  "name": "@f0rce/ace-widget",
+  "description": "F0rce's Backend Vaadin integration of LostInBrittany's Ace (http://ace.c9.io/) widget",
   "keywords": [
     "web-component",
     "web-components",
@@ -60,18 +10,33 @@
 	"f0rce",
 	"vaadin"
   ],
-  "license": "MIT",
-  "main": "ace-widget.js",
-  "name": "@f0rce/ace-widget",
+  "homepage": "https://github.com/F0rce/ace-widget",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LostInBrittany/ace-widget.git"
+    "url": "https://github.com/F0rce/ace-widget.git"
   },
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
     "supports-color": "3.1.2",
     "type-detect": "1.0.0"
+  },
+  "main": "ace-widget.js",
+  "author": "David Dodlek <david@dodlek.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@f0rce/ace-builds": "^1.4.12"
+  },
+  "devDependencies": {
+    "@polymer/iron-component-page": "^3.0.0-pre.18",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.18",
+    "@polymer/iron-icon": "^3.0.0-pre.18",
+    "@polymer/iron-icons": "^3.0.0-pre.18",
+    "@polymer/iron-test-helpers": "^3.0.0-pre.18",
+    "@polymer/test-fixture": "^3.0.0-pre.18",
+    "wct-browser-legacy": "^0.0.1-pre.11",
+    "@webcomponents/webcomponentsjs": "^2.0.0"
   },
   "version": "3.0.1"
 }
