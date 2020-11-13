@@ -11,16 +11,21 @@ import com.vaadin.flow.component.EventData;
 @DomEvent("editor-content")
 public class BlurChanged extends ComponentEvent<AceEditor> {
 
-	private String value;
+	private String txtValue;
+	private String selectionValue;
 
-	public BlurChanged(AceEditor source, boolean fromClient, @EventData("event.detail.value") String value) {
+	public BlurChanged(AceEditor source, boolean fromClient, @EventData("event.detail.value") String txtValue, @EventData("event.detail.selection") String selectionValue) {
 		super(source, fromClient);
-		source.getElement().setProperty("selection", "-|-"); // Reset the selection so the selection can be set to the same index again
-		this.value = value;
+		this.txtValue = txtValue;
+		this.selectionValue = selectionValue;
 	}
 
-	public String getValue() {
-		return value;
+	public String getTxtValue() {
+		return txtValue;
+	}
+	
+	public String getSelectionValue() {
+		return selectionValue;
 	}
 
 }
