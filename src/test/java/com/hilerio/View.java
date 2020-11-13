@@ -1,21 +1,39 @@
 package com.hilerio;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.hilerio.ace.AceEditor;
+import com.hilerio.ace.AceMarkerColor;
 import com.hilerio.ace.AceMode;
 import com.hilerio.ace.AceTheme;
-
+import com.hilerio.ace.Apps;
+import com.hilerio.ace.AceMarker;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 @Route("")
 public class View extends VerticalLayout {
 
 	public View() {
 
+		Dialog aceDialog = new Dialog();
+
+		VerticalLayout aceLayout = new VerticalLayout();
+
 		HorizontalLayout layoutComboBoxes = new HorizontalLayout();
+
+		ContextMenu contextMenu = new ContextMenu();
 
 		ComboBox<AceTheme> themesComboBox = new ComboBox<>();
 		themesComboBox.setItems(AceTheme.values());
@@ -27,16 +45,16 @@ public class View extends VerticalLayout {
 
 		layoutComboBoxes.add(themesComboBox, modesComboBox);
 
-		setSizeFull();
+		aceLayout.setSizeFull();
 
 		AceEditor aceEditor = new AceEditor();
-
-		aceEditor.setValue("TEST");
 //		aceEditor.setTheme(AceTheme.github);
 //		aceEditor.setMode(AceMode.java);
-		aceEditor.setFontSize(20);
-		aceEditor.setWidth("100%");
-		aceEditor.setHeight("100%");
+		aceEditor.setFontSize(15);
+		// aceEditor.setHeight("100%");
+		// aceEditor.setWidth("100%");
+
+//		aceEditor.setHeight("100%");
 //		aceEditor.setReadOnly(false);
 //		aceEditor.setBasePath();
 //		aceEditor.setHighlightActiveLine(false);
@@ -57,21 +75,33 @@ public class View extends VerticalLayout {
 //		aceEditor.setMinlines(2);
 //		aceEditor.setMaxlines(10);
 //		aceEditor.setPlaceholder("DEMO");
+		aceEditor.setAutoComplete(true);
+		aceEditor.setHighlightActiveLine(false);
+		aceEditor.setHighlightSelectedWord(false);
+		aceEditor.setPlaceholder("TEST");
+		aceEditor.setMinHeight("200px");
 //
 //		aceEditor.addFocusListener(e -> {
 //		 System.out.println("Focus");
 //		});
 
-		add(layoutComboBoxes, aceEditor, new Button("demo", e -> {
-//			System.out.println(aceEditor.getValue());
+		themesComboBox.setValue(aceEditor.getTheme());
+		modesComboBox.setValue(aceEditor.getMode());
 
-//			aceEditor.setCursorPosition(8);
-//			aceEditor.setSelection(0, 5);
-		}));
+		Button button = new Button("demo");
+		Button button2 = new Button("rm custom");
 
-		expand(aceEditor);
+		aceLayout.add(layoutComboBoxes, aceEditor, button, button2);
+
+		aceLayout.expand(aceEditor);
+		contextMenu.setTarget(aceEditor);
+
+		contextMenu.addItem("Test");
 
 		themesComboBox.addValueChangeListener(event -> {
+			if (!event.isFromClient())
+				return;
+
 			if (event.getValue() != null) {
 				aceEditor.setTheme(event.getValue());
 			}
@@ -82,5 +112,43 @@ public class View extends VerticalLayout {
 				aceEditor.setMode(event.getValue());
 			}
 		});
+
+		button.addClickListener(event -> {
+			aceEditor.addMarkerAtCurrentSelection(AceMarkerColor.orange, "TEST");
+		});
+		button2.addClickListener(event -> {
+			aceEditor.disableCustomAutoCompletion();
+
+//			List<AceMarker> list = aceEditor.getAllMarkers();
+//			for (AceMarker marker : list) {
+//				System.out.println(marker.toString());
+//			}
+//			
+//			aceEditor.removeMarker(list.get(0));
+			aceEditor.removeMarkerByAlias("Test123");
+		});
+
+		aceDialog.setHeight("1000px");
+		aceDialog.setWidth("2000px");
+		aceDialog.setCloseOnEsc(true);
+		aceDialog.setResizable(true);
+		aceDialog.add(aceLayout);
+
+		List<Apps> appList = new ArrayList<>();
+		appList.add(new Apps("Ace Editor", "v1.4.4-Beta"));
+		appList.add(new Apps("Test", "v1.0"));
+
+		Grid<Apps> grid = new Grid<>(Apps.class);
+		grid.setItems(appList);
+
+		grid.setWidth("500px");
+
+		grid.addItemDoubleClickListener(event -> {
+			if (event.getItem().getAppname() == "Ace Editor") {
+				aceDialog.open();
+			}
+		});
+
+		add(grid);
 	}
 }
