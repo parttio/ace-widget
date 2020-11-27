@@ -15,9 +15,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
 
-import "@f0rce/ace-builds/src-noconflict/ace.js";
-import "@f0rce/ace-builds/src-noconflict/ext-language_tools.js";
-import "@f0rce/ace-builds/src-noconflict/snippets/snippets.js";
+import "ace-builds/src-noconflict/ace.js";
+import "ace-builds/src-noconflict/ext-language_tools.js";
+import "ace-builds/src-noconflict/snippets/snippets.js";
 
 var editorFocus = function () {
   var _self = this;
@@ -218,6 +218,15 @@ class AceWidget extends PolymerElement {
         value: "",
         observer: "rmMarkers",
       },
+      refresh: {
+        type: String,
+        value: "",
+        observer: "refreshEditor",
+      },
+      firstRun: {
+        type: Boolean,
+        value: true,
+      },
     };
   }
 
@@ -233,7 +242,7 @@ class AceWidget extends PolymerElement {
     super.connectedCallback();
 
     let baseUrl =
-      this.baseUrl || `${this.importPath}../../ace-builds/src-noconflict/`;
+      this.baseUrl || `${this.importPath}../../ace-builds/src-min-noconflict/`;
 
     // In non-minified mode, imports are parallelized, and sometimes `ext-language_tools.js` and
     // `snippets.js` arrive before `ace.js` is ready. I am adding some tests here with dynamic imports
@@ -278,9 +287,9 @@ class AceWidget extends PolymerElement {
     ace.config.set("workerPath", baseUrl);
 
     this.themeChanged();
-    this.editorValue = "";
-    this._selection = "0|0|0|0|-";
 
+    this.editorValue = "";
+    this._selection = this.selection;
     editor.setOption("enableSnippets", this.enableSnippets);
     editor.setOption("enableBasicAutocompletion", this.enableAutocompletion);
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
@@ -354,6 +363,43 @@ class AceWidget extends PolymerElement {
         editor.getSession().getValue()
       );
     }
+
+    this.firstRun = false;
+  }
+
+  refreshEditor() {
+    if (this.firstRun = true) {
+      return;
+    }
+
+    editor.setOption("enableSnippets", this.enableSnippets);
+    editor.setOption("enableBasicAutocompletion", this.enableAutocompletion);
+    editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
+    editor.setOption("showGutter", this.showGutter);
+
+    // Forcing a xyzChanged() call to refresh the editor after changing the visibility
+    this.themeChanged();
+    this.readonlyChanged();
+    this.wrapChanged();
+    this.tabSizeChanged();
+    this.modeChanged();
+    this.softtabsChanged();
+    this.fontSizeChanged();
+    this.selectionChanged();
+    this.customAutoCompletionChanged();
+    this.markerChanged();
+    this.highlightActiveLineChanged();
+    this.highlightSelectedWordChanged();
+
+    editor.setShowPrintMargin(this.showPrintMargin);
+    editor.setShowInvisibles(this.showInvisibles);
+    editor.setDisplayIndentGuides(this.displayIndentGuides);
+    editor.getSession().setUseWorker(this.useWorker);
+
+    editor.setOptions({
+      minLines: this.minlines,
+      maxLines: this.maxlines,
+    });
   }
 
   fontSizeChanged() {
@@ -364,7 +410,9 @@ class AceWidget extends PolymerElement {
   }
 
   modeChanged() {
-    if (!this.editor) return;
+    if (this.editor == undefined) {
+      return;
+    }
     this.editor.getSession().setMode("ace/mode/" + this.mode);
   }
 
@@ -380,7 +428,6 @@ class AceWidget extends PolymerElement {
       return;
     }
     this.editor.setTheme("ace/theme/" + this.theme);
-    return;
   }
 
   valueChanged() {
@@ -511,11 +558,14 @@ class AceWidget extends PolymerElement {
   }
 
   get editorValue() {
+    if (this.editor == undefined) {
+      return "";
+    }
     return this.editor.getValue();
   }
 
   set editorValue(value) {
-    if (value === undefined) {
+    if (this.editor == undefined || value === undefined) {
       return;
     }
     this._value = value;
@@ -629,4 +679,4 @@ class AceWidget extends PolymerElement {
   }
 }
 
-window.customElements.define(AceWidget.is, AceWidget);
+customElements.define(AceWidget.is, AceWidget);

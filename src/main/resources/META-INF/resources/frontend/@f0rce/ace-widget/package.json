@@ -1,14 +1,13 @@
 {
   "name": "@f0rce/ace-widget",
-  "description": "F0rce's Backend Vaadin integration of LostInBrittany's Ace (http://ace.c9.io/) widget",
+  "description": "Frontend Vaadin integration of LostInBrittany's Ace (http://ace.c9.io/) widget",
   "keywords": [
     "web-component",
     "web-components",
     "polymer",
-    "lostinbrittany",
     "ace",
-	"f0rce",
-	"vaadin"
+    "f0rce",
+    "vaadin"
   ],
   "homepage": "https://github.com/F0rce/ace-widget",
   "repository": {
@@ -26,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@f0rce/ace-builds": "^1.4.12"
+    "ace-builds": "^1.4.0"
   },
   "devDependencies": {
     "@polymer/iron-component-page": "^3.0.0-pre.18",
@@ -38,5 +37,5 @@
     "wct-browser-legacy": "^0.0.1-pre.11",
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },
-  "version": "3.0.1"
+  "version": "1.0.0"
 }

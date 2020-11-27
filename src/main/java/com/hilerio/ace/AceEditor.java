@@ -1,18 +1,19 @@
 package com.hilerio.ace;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.shared.Registration;
 
 /**
  * @author Sergio Alberto Hilerio
@@ -20,7 +21,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
  */
 @SuppressWarnings("serial")
 @Tag("ace-widget")
-@NpmPackage(value = "@f0rce/ace-widget", version = "3.0.1")
+@NpmPackage(value = "@f0rce/ace-widget", version = "1.0.0")
 @JsModule("./@f0rce/ace-widget/ace-widget.js")
 public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
@@ -59,19 +60,24 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 		setWidth("100%");
 		setHeight("300px");
-	}
+	};
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
-		addListener(BlurChanged.class, this::updateText);
-	}
+		refresh();
+	};
+
+	@Override
+	public Registration addBlurListener(ComponentEventListener<BlurEvent<AceEditor>> listener) {
+		return super.addListener(BlurChanged.class, this::updateText);
+	};
 
 	// Updates the Text after the Blur event has been fired (Keyboard lost focus)
 	private void updateText(BlurChanged event) {
 		setValue(event.getTxtValue());
 		updateSelection(event);
-	}
+	};
 
 	// Updates the private variables to ensure that client and server are up to date
 	private void updateSelection(BlurChanged event) {
@@ -83,7 +89,12 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 		this.cursorPosition = new int[] { rowEnd, to };
 		this.selection = new int[] { rowStart, from, rowEnd, to };
-	}
+	};
+
+	// Refreshes the whole editor because sometimes some settings are lost
+	private void refresh() {
+		getElement().setProperty("refresh", UUID.randomUUID().toString());
+	};
 
 	/**
 	 * Sets the mode(language) of the editor.
@@ -91,9 +102,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param mode AceMode
 	 */
 	public void setMode(AceMode mode) {
-		getElement().setAttribute("mode", mode.toString());
+		getElement().setProperty("mode", mode.toString());
 		this.editorMode = mode;
-	}
+	};
 
 	/**
 	 * Returns the current set mode for the editor.
@@ -102,7 +113,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public AceMode getMode() {
 		return this.editorMode;
-	}
+	};
 
 	/**
 	 * Sets the theme (style) of the editor.
@@ -110,8 +121,8 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param theme AceTheme
 	 */
 	public void setTheme(AceTheme theme) {
-		getElement().setAttribute("theme", theme.toString());
-	}
+		getElement().setProperty("theme", theme.toString());
+	};
 
 	/**
 	 * Returns the current set theme for the editor.
@@ -120,14 +131,14 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public AceTheme getTheme() {
 		return this.editorTheme;
-	}
+	};
 
 	/**
 	 * Cleans the value contained in the editor.
 	 */
 	public void clear() {
 		getElement().setProperty("value", "");
-	}
+	};
 
 	/**
 	 * Sets value for the editor.
@@ -137,7 +148,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setValue(String value) {
 		getElement().setProperty("value", value);
 		this.blur(); // To force the exchange between client and server.
-	}
+	};
 
 	/**
 	 * Sets font-size for the editor in pixels.
@@ -145,9 +156,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value int
 	 */
 	public void setFontSize(int value) {
-		getElement().setAttribute("font-size", value + "px");
+		getElement().setProperty("fontSize", value + "px");
 		this.fontSize = value + "px";
-	}
+	};
 
 	/**
 	 * Returns the current set font-size of the editor in pixels.
@@ -156,7 +167,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getFontSize() {
 		return this.fontSize;
-	}
+	};
 
 	/**
 	 * Sets softtabs for the editor.
@@ -164,9 +175,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value boolean
 	 */
 	public void setSofttabs(boolean value) {
-		getElement().setAttribute("softtabs", value);
+		getElement().setProperty("softtabs", value);
 		this.softTabs = value;
-	}
+	};
 
 	/**
 	 * Returns if softtabs are currently enabled/disabled for the editor.
@@ -175,7 +186,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isSofttabs() {
 		return this.softTabs;
-	}
+	};
 
 	/**
 	 * Sets tab-size for the editor.
@@ -183,9 +194,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value int
 	 */
 	public void setTabSize(int value) {
-		getElement().setAttribute("tab-size", String.valueOf(value));
+		getElement().setAttribute("tabSize", String.valueOf(value));
 		this.tabSize = value;
-	}
+	};
 
 	/**
 	 * Returns the current set tab-size for the editor.
@@ -194,7 +205,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public int getTabSize() {
 		return this.tabSize;
-	}
+	};
 
 	/**
 	 * Sets wrap for the editor.
@@ -202,9 +213,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param wrap boolean
 	 */
 	public void setWrap(boolean wrap) {
-		getElement().setAttribute("wrap", wrap);
+		getElement().setProperty("wrap", wrap);
 		this.wrap = wrap;
-	}
+	};
 
 	/**
 	 * Returns if wrap is enabled/disabled for the editor.
@@ -213,7 +224,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isWrap() {
 		return this.wrap;
-	}
+	};
 
 	/**
 	 * Sets AutoComplete for the editor.
@@ -223,7 +234,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setAutoComplete(boolean value) {
 		getElement().setProperty("enableAutocompletion", value);
 		this.autoComplete = value;
-	}
+	};
 
 	/**
 	 * Returns if autocomplete is enabled/disabled for the editor.
@@ -232,7 +243,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isAutoComplete() {
 		return this.autoComplete;
-	}
+	};
 
 	/**
 	 * Sets minlines for the editor.
@@ -240,9 +251,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param minlines int
 	 */
 	public void setMinlines(int minlines) {
-		getElement().setAttribute("minlines", String.valueOf(minlines));
+		getElement().setProperty("minlines", String.valueOf(minlines));
 		this.minLines = minlines;
-	}
+	};
 
 	/**
 	 * Returns the minimum set lines for the editor.
@@ -251,7 +262,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public int getMinLines() {
 		return this.minLines;
-	}
+	};
 
 	/**
 	 * Sets maxlines for the editor.
@@ -259,9 +270,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param maxlines int
 	 */
 	public void setMaxlines(int maxlines) {
-		getElement().setAttribute("maxlines", String.valueOf(maxlines));
+		getElement().setProperty("maxlines", String.valueOf(maxlines));
 		this.maxLines = maxlines;
-	}
+	};
 
 	/**
 	 * Return the maximum lines set for the editor.
@@ -270,7 +281,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public int getMaxLines() {
 		return this.maxLines;
-	}
+	};
 
 	/**
 	 * Sets initialFocus for the editor.
@@ -278,9 +289,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value boolean
 	 */
 	public void setInitialFocus(boolean value) {
-		getElement().setAttribute("initialFocus", value);
+		getElement().setProperty("initialFocus", value);
 		this.initialFocus = value;
-	}
+	};
 
 	/**
 	 * Returns if initial focus is enabled/disabled for the editor.
@@ -289,7 +300,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isInitialFocus() {
 		return this.initialFocus;
-	}
+	};
 
 	/**
 	 * Sets placeholder for the editor.
@@ -297,9 +308,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value String
 	 */
 	public void setPlaceholder(String value) {
-		getElement().setAttribute("placeholder", value);
+		getElement().setProperty("placeholder", value);
 		this.placeHolder = value;
-	}
+	};
 
 	/**
 	 * Returns the placeholder set for the editor.
@@ -308,7 +319,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getPlaceholder() {
 		return this.placeHolder;
-	}
+	};
 
 	/**
 	 * Sets readOnly for the editor.
@@ -316,9 +327,9 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value boolean
 	 */
 	public void setReadOnly(boolean value) {
-		getElement().setAttribute("readonly", value);
+		getElement().setProperty("readonly", value);
 		this.readOnly = value;
-	}
+	};
 
 	/**
 	 * Returns if readOnly is enabled/disabled for the editor.
@@ -327,7 +338,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isReadOnly() {
 		return this.readOnly;
-	}
+	};
 
 	/**
 	 * Sets height in px/pixel or percent.
@@ -345,7 +356,14 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getHeight() {
 		return getElement().getStyle().get("height");
-	}
+	};
+
+	/**
+	 * Sets the height to 100%.
+	 */
+	public void setHeightFull() {
+		getElement().getStyle().set("height", "100%");
+	};
 
 	/**
 	 * Sets max-height in px/pixel or percent.
@@ -363,7 +381,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getMaxHeight() {
 		return getElement().getStyle().get("max-height");
-	}
+	};
 
 	/**
 	 * Sets min-height in px/pixel or percent.
@@ -381,7 +399,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getMinHeight() {
 		return getElement().getStyle().get("min-height");
-	}
+	};
 
 	/**
 	 * Sets width in px/pixel or percent.
@@ -393,13 +411,20 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	};
 
 	/**
+	 * Sets the width to 100%.
+	 */
+	public void setWidthFull() {
+		getElement().getStyle().set("width", "100%");
+	};
+
+	/**
 	 * Returns the width set for the editor in px/pixel or percent.
 	 * 
 	 * @return String
 	 */
 	public String getWidth() {
 		return getElement().getStyle().get("width");
-	}
+	};
 
 	/**
 	 * Sets max-width in px/pixel or percent.
@@ -417,7 +442,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getMaxWidth() {
 		return getElement().getStyle().get("max-width");
-	}
+	};
 
 	/**
 	 * Sets min-width in px/pixel or percent.
@@ -435,7 +460,15 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getMinWidth() {
 		return getElement().getStyle().get("min-width");
-	}
+	};
+
+	/**
+	 * Sets the height and width to 100%.
+	 */
+	public void setSizeFull() {
+		getElement().getStyle().set("width", "100%");
+		getElement().getStyle().set("height", "100%");
+	};
 
 	/**
 	 * Sets BasePath / BaseUrl.
@@ -455,7 +488,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String getBasePath() {
 		return this.basePath;
-	}
+	};
 
 	/**
 	 * Sets showPrintMargin for the editor.
@@ -465,7 +498,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setShowPrintMargin(boolean value) {
 		getElement().setProperty("showPrintMargin", value);
 		this.printMargin = value;
-	}
+	};
 
 	/**
 	 * Returns if showPrintMargin is enabled/disabled for the editor.
@@ -474,7 +507,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isShowPrintMargin() {
 		return this.printMargin;
-	}
+	};
 
 	/**
 	 * Sets showInvisibles for the editor.
@@ -484,7 +517,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setShowInvisibles(boolean value) {
 		getElement().setProperty("showInvisibles", value);
 		this.showInvisibles = value;
-	}
+	};
 
 	/**
 	 * Returns if showInvisibles is enabled/disabled for the editor.
@@ -493,7 +526,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isShowInvisibles() {
 		return this.showInvisibles;
-	}
+	};
 
 	/**
 	 * Sets showGutter for the editor.
@@ -503,7 +536,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setShowGutter(boolean value) {
 		getElement().setProperty("showGutter", value);
 		this.showGutter = value;
-	}
+	};
 
 	/**
 	 * Returns if showGutter is enabled/disabled for the editor.
@@ -512,7 +545,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isShowGutter() {
 		return this.showGutter;
-	}
+	};
 
 	/**
 	 * Sets highlightActiveLine for the editor.
@@ -522,7 +555,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setHighlightActiveLine(boolean value) {
 		getElement().setProperty("highlightActiveLine", value);
 		this.hightlightActiveLine = value;
-	}
+	};
 
 	/**
 	 * Returns if hightlightActiveLine is enabled/disabled for the editor.
@@ -531,7 +564,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isHightlightActiveLine() {
 		return this.hightlightActiveLine;
-	}
+	};
 
 	/**
 	 * Sets displayIndentGuides for the editor.
@@ -541,7 +574,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setDisplayIndentGuides(boolean value) {
 		getElement().setProperty("displayIndentGuides", value);
 		this.displayIndentGuides = value;
-	}
+	};
 
 	/**
 	 * Returns if displayIndentGuides is enabled/disabled for the editor.
@@ -550,7 +583,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isDisplayIndentGuides() {
 		return this.displayIndentGuides;
-	}
+	};
 
 	/**
 	 * Sets highlightSelectedWord for the editor.
@@ -560,7 +593,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setHighlightSelectedWord(boolean value) {
 		getElement().setProperty("highlightSelectedWord", value);
 		this.highlightSelectedWord = value;
-	}
+	};
 
 	/**
 	 * Returns if hightlightSelectedWord is enabled/disabled for the editor.
@@ -569,7 +602,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isHightlightSelectedWord() {
 		return this.highlightSelectedWord;
-	}
+	};
 
 	/**
 	 * Sets selection for the editor.
@@ -588,7 +621,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		getElement().setProperty("selection", 0 + "|" + from + "|" + 0 + "|" + to + "|" + UUID.randomUUID().toString());
 		this.selection = new int[] { 0, from, 0, to };
 		this.cursorPosition = new int[] { 0, to };
-	}
+	};
 
 	/**
 	 * Sets selection for the editor and optionally also sets the focus.
@@ -602,7 +635,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		if (focus) {
 			this.focus();
 		}
-	}
+	};
 
 	/**
 	 * Sets selection for the editor.
@@ -631,23 +664,23 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				rowStart + "|" + from + "|" + rowEnd + "|" + to + "|" + UUID.randomUUID().toString());
 		this.selection = new int[] { rowStart, from, rowEnd, to };
 		this.cursorPosition = new int[] { rowEnd, to };
-	}
+	};
 
 	/**
 	 * Sets selection for the editor and optionally also sets the focus.
 	 * 
-	 * @param rowStart
-	 * @param from
-	 * @param rowEnd
-	 * @param to
-	 * @param focus
+	 * @param rowStart int
+	 * @param from     int
+	 * @param rowEnd   int
+	 * @param to       int
+	 * @param focus    boolean
 	 */
 	public void setSelection(int rowStart, int from, int rowEnd, int to, boolean focus) {
 		setSelection(rowStart, from, rowEnd, to);
 		if (focus) {
 			this.focus();
 		}
-	}
+	};
 
 	/**
 	 * Returns an int array of the current selection where the first index
@@ -658,7 +691,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public int[] getSelection() {
 		return this.selection;
-	}
+	};
 
 	/**
 	 * Sets useWorker for the editor.
@@ -668,7 +701,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setUseWorker(boolean value) {
 		getElement().setProperty("useWorker", value);
 		this.useWorker = value;
-	}
+	};
 
 	/**
 	 * Returns if useWorker is enabled/disabled for the editor.
@@ -677,7 +710,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isUseWorker() {
 		return this.useWorker;
-	}
+	};
 
 	/**
 	 * Sets cursorPosition for the editor.
@@ -692,7 +725,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		getElement().setProperty("selection", 0 + "|" + pos + "|" + 0 + "|" + pos + "|" + UUID.randomUUID().toString());
 		this.cursorPosition = new int[] { 0, pos };
 		this.selection = new int[] { 0, pos, 0, pos };
-	}
+	};
 
 	/**
 	 * Sets cursorPosition for the editor and optionally also sets the focus.
@@ -705,7 +738,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		if (focus) {
 			this.focus();
 		}
-	}
+	};
 
 	/**
 	 * Returns the current set cursor position in the editor where the first index
@@ -715,7 +748,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public int[] getCursorPosition() {
 		return this.cursorPosition;
-	}
+	};
 
 	/**
 	 * Sets liveAutocompletion for the editor.
@@ -725,7 +758,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setLiveAutocompletion(boolean value) {
 		getElement().setProperty("enableLiveAutocompletion", value);
 		this.liveAutocompletion = value;
-	}
+	};
 
 	/**
 	 * Returns if live autocompletion is enabled/disabled for the editor.
@@ -734,7 +767,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isLiveAutocompletion() {
 		return this.liveAutocompletion;
-	}
+	};
 
 	/**
 	 * Sets enableSnippets for the editor.
@@ -744,7 +777,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setEnableSnippets(boolean value) {
 		getElement().setProperty("enableSnippets", value);
 		this.enableSnippets = value;
-	}
+	};
 
 	/**
 	 * Returns if snippets are enabled/disabled for the editor.
@@ -753,7 +786,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public boolean isEnableSnippets() {
 		return this.enableSnippets;
-	}
+	};
 
 	/**
 	 * Sets a custom autocompletion list for the editor.
@@ -767,7 +800,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		}
 		getElement().setProperty("customAutoCompletion", "|" + String.join(",", wordList));
 		this.customAutoCompletion = wordList;
-	}
+	};
 
 	/**
 	 * Sets a custom autocompletion list for the editor and sets the category aswell
@@ -783,7 +816,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		}
 		getElement().setProperty("customAutoCompletion", category + "|" + String.join(",", wordList));
 		this.customAutoCompletion = wordList;
-	}
+	};
 
 	/**
 	 * Returns a String array of the current custom autocompletion for the editor.
@@ -792,7 +825,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public String[] getCustomAutoCompletion() {
 		return this.customAutoCompletion;
-	}
+	};
 
 	/**
 	 * Removes the custom autocompletion list set with setCustomAutoCompletiton()
@@ -800,7 +833,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 */
 	public void disableCustomAutoCompletion() {
 		getElement().setProperty("customAutoCompletion", "|");
-	}
+	};
 
 	/**
 	 * Adds text to a specific position of the editor.
@@ -823,7 +856,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		this.setValue(newVal.toString());
 		this.selection = new int[] { 0, this.getValue().length() - 1, 0, this.getValue().length() - 1 };
 		this.cursorPosition = new int[] { 0, this.getValue().length() - 1 };
-	}
+	};
 
 	/**
 	 * Adds text at the current position of the editor.<br>
@@ -857,15 +890,15 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 			this.cursorPosition = new int[] { 0, currentVal.length() - 1 };
 			this.selection = new int[] { 0, 0, 0, 0 };
 		}
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor at the current selection. If the returned string
 	 * is null, there is no current selection. Use any addMarkerAtSelection() method
 	 * instead. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param color AceMarkerColor
 	 * 
@@ -884,15 +917,15 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 			return marker.getID();
 		}
 		return null;
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor at the current selection. If the returned string
 	 * is null, there is no current selection. Use any addMarkerAtSelection() method
 	 * instead. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param color AceMarkerColor
 	 * @param alias String
@@ -912,13 +945,13 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 			return marker.getID();
 		}
 		return null;
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param from  int
 	 * @param to    int
@@ -941,13 +974,13 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				+ marker.getAceMarkerColor().toString() + "|" + marker.getID());
 		this.markers.add(marker);
 		return marker.getID();
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param rowStart int
 	 * @param from     int
@@ -979,19 +1012,19 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				+ "|" + marker.getTo() + "|" + marker.getAceMarkerColor().toString() + "|" + marker.getID());
 		this.markers.add(marker);
 		return marker.getID();
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param from  int
 	 * @param to    int
 	 * @param color AceMarkerColor
 	 * @param alias String
-	 * 
+	 *
 	 * @return String
 	 */
 	public String addMarkerAtSelection(int from, int to, AceMarkerColor color, String alias) {
@@ -1009,13 +1042,13 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				+ marker.getAceMarkerColor().toString() + "|" + marker.getID());
 		this.markers.add(marker);
 		return marker.getID();
-	}
+	};
 
 	/**
 	 * Adds a marker to the editor. If the marker is not visible make sure that
-	 * {@link #highlightActiveLine(boolean) hightlightActiveLine()} and
-	 * {@link #highlightSelectedWord(boolean) highlightSelectedWord} are set to
-	 * false.
+	 * {@link #setHighlightActiveLine(boolean) setHightlightActiveLine()} and
+	 * {@link #setHighlightSelectedWord(boolean) setHighlightSelectedWord} are set
+	 * to false.
 	 * 
 	 * @param rowStart int
 	 * @param from     int
@@ -1048,17 +1081,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				+ "|" + marker.getTo() + "|" + marker.getAceMarkerColor().toString() + "|" + marker.getID());
 		this.markers.add(marker);
 		return marker.getID();
-	}
+	};
 
 	/**
 	 * Returns a list of all current active markers. If the list is empty, no marker
 	 * is set at the moment.
 	 * 
-	 * @return List<AceMarker>
+	 * @return a List of all AceMarkers
 	 */
 	public List<AceMarker> getAllMarkers() {
 		return this.markers;
-	}
+	};
 
 	/**
 	 * Removes a specific marker from the editor.<br>
@@ -1075,7 +1108,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				markers.remove(marker);
 			}
 		}
-	}
+	};
 
 	/**
 	 * Removes a specific marker from the editor by id.<br>
@@ -1092,7 +1125,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				markers.remove(mar);
 			}
 		}
-	}
+	};
 
 	/**
 	 * Removes a specific marker from the editor by alias.<br>
@@ -1109,7 +1142,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 				markers.remove(mar);
 			}
 		}
-	}
+	};
 
 	/**
 	 * Removes every marker from the editor.
@@ -1117,6 +1150,17 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void removeAllMarkers() {
 		getElement().setProperty("rmMarker", "all" + UUID.randomUUID().toString());
 		this.markers = new ArrayList<>();
-	}
+	};
 
+	/**
+	 * Changes the visibilty of the editor.
+	 * 
+	 * @param visible boolean
+	 */
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		refresh();
+		setValue(this.getValue());
+	}
 }
