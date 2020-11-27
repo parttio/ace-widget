@@ -1,15 +1,12 @@
 package com.hilerio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.hilerio.ace.AceEditor;
-import com.hilerio.ace.AceMarkerColor;
 import com.hilerio.ace.AceMode;
 import com.hilerio.ace.AceTheme;
 import com.hilerio.ace.Apps;
-import com.hilerio.ace.AceMarker;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -114,18 +111,15 @@ public class View extends VerticalLayout {
 		});
 
 		button.addClickListener(event -> {
-			aceEditor.addMarkerAtCurrentSelection(AceMarkerColor.orange, "TEST");
+			aceEditor.setVisible(false);
 		});
 		button2.addClickListener(event -> {
-			aceEditor.disableCustomAutoCompletion();
-
-//			List<AceMarker> list = aceEditor.getAllMarkers();
-//			for (AceMarker marker : list) {
-//				System.out.println(marker.toString());
+			aceEditor.setCustomAutoCompletion(new String[] { "TEST", "TEST2", "TEST3" });
 //			}
+
+			aceEditor.setVisible(true);
 //			
 //			aceEditor.removeMarker(list.get(0));
-			aceEditor.removeMarkerByAlias("Test123");
 		});
 
 		aceDialog.setHeight("1000px");
