@@ -1,32 +1,38 @@
-*I will include a full documentation on the usage of the widget as soon as v1.5.0 is released (very soon).*
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/ace-widget1)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/ace-widget1.svg)](https://vaadin.com/directory/component/ace-widget1)
 
-# Ace Editor Vaadin v14
+# Ace Editor for Vaadin Flow 14
 
-Vaadin 14 Java integration of @polymer/paper-slider
+Even **more** embeddable code editor
+custom Vaadin widget - [Ace](http://ace.c9.io/) - The High Performance Code Editor
 
-## Development instructions
+> Originally based on [LostInBrittany's fork](https://github.com/LostInBrittany/ace-widget)
+> of [PolymerLabs ace-element](https://github.com/PolymerLabs/ace-element)
 
-JavaScript modules can either be published as an NPM package or be kept as local 
-files in your project. The local JavaScript modules should be put in 
-`src/main/resources/META-INF/frontend` so that they are automatically found and 
-used in the using application.
-
-If the modules are published then the package should be noted in the component 
-using the `@NpmPackage` annotation in addition to using `@JsModule` annotation.
+**Created** by Sergio Alberto Hilerio<br/>
+**Maintained** by David "F0rce" Dodlek
 
 
-Starting the test/demo server:
-1. Run `mvn jetty:run`.
-2. Open http://localhost:8080 in the browser.
+## Install
 
-## Publishing to Vaadin Directory
+Install the component using [Vaadin Directory](https://vaadin.com/directory/component/ace-widget1):
 
-You can create the zip package needed for [Vaadin Directory](https://vaadin.com/directory/) using
+```xml
+<dependency>
+   <groupId>com.hilerio</groupId>
+   <artifactId>ace-widget</artifactId>
+   <version>1.0.0</version>
+</dependency>
+
+<repository>
+   <id>vaadin-addons</id>
+   <url>https://maven.vaadin.com/vaadin-addons</url>
+</repository>
 ```
-mvn versions:set -DnewVersion=1.0.0 # You cannot publish snapshot versions 
-mvn install -Pdirectory
-```
 
-The package is created as `target/paper-slider-1.0.0.zip`
+*Latest Version: v1.0.0*
 
-For more information or to upload the package, visit https://vaadin.com/directory/my-components?uploadNewComponent
+
+## Documentation
+
+*soon*
