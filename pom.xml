@@ -7,7 +7,7 @@
 	<groupId>com.hilerio</groupId>
 	<artifactId>ace-widget</artifactId>
 
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>ace-widget</name>
 	<description>Integration of ace-widget for Vaadin platform</description>
 
