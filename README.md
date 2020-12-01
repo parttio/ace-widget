@@ -1,5 +1,6 @@
 [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/ace-widget1)
 [![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/ace-widget1.svg)](https://vaadin.com/directory/component/ace-widget1)
+![npm](https://img.shields.io/npm/v/@f0rce/ace-widget)
 ![Downloads on npmjs.com](https://img.shields.io/npm/dt/@f0rce/ace-widget.svg)
 
 # Ace Editor for Vaadin Flow 14
