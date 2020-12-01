@@ -5,15 +5,13 @@ import java.util.List;
 import java.util.UUID;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.shared.Registration;
 
 /**
  * @author Sergio Alberto Hilerio
@@ -57,20 +55,16 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	public AceEditor() {
 		super("value", "", false);
+		super.addListener(BlurChanged.class, this::updateText);
 
 		setWidth("100%");
 		setHeight("300px");
 	};
 
 	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
+	protected void onDetach(DetachEvent detachEvent) {
+		super.onDetach(detachEvent);
 		refresh();
-	};
-
-	@Override
-	public Registration addBlurListener(ComponentEventListener<BlurEvent<AceEditor>> listener) {
-		return super.addListener(BlurChanged.class, this::updateText);
 	};
 
 	// Updates the Text after the Blur event has been fired (Keyboard lost focus)
@@ -93,6 +87,8 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	// Refreshes the whole editor because sometimes some settings are lost
 	private void refresh() {
+		// To force a value exchange between client and server
+		this.blur();
 		getElement().setProperty("refresh", UUID.randomUUID().toString());
 	};
 
@@ -1161,6 +1157,5 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		refresh();
-		setValue(this.getValue());
 	}
 }

@@ -129,7 +129,7 @@ public class View extends VerticalLayout {
 		aceDialog.add(aceLayout);
 
 		List<Apps> appList = new ArrayList<>();
-		appList.add(new Apps("Ace Editor", "v1.4.4-Beta"));
+		appList.add(new Apps("Ace Editor", "v1.0.0"));
 		appList.add(new Apps("Test", "v1.0"));
 
 		Grid<Apps> grid = new Grid<>(Apps.class);
