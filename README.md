@@ -38,3 +38,8 @@ Install the component using [Vaadin Directory](https://vaadin.com/directory/comp
 ## Documentation
 
 [docs.f0rce.de/ace](https://docs.f0rce.de/ace)
+
+
+## License
+
+[MIT License](http://opensource.org/licenses/MIT)
