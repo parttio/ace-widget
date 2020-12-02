@@ -1,7 +1,7 @@
 package com.hilerio.ace;
 
 /**
- * @author: Sergio Alberto Hilerio.
+ * @author Sergio Alberto Hilerio.
  */
 
 public enum AceTheme {
