@@ -67,7 +67,8 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		refresh();
 	};
 
-	// Updates the Text after the Blur event has been fired (Keyboard lost focus)
+	// Updates the Text and selection after the Blur event has been fired (Keyboard
+	// lost focus)
 	private void updateText(BlurChanged event) {
 		setValue(event.getTxtValue());
 		updateSelection(event);

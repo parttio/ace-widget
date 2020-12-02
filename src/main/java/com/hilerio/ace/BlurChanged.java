@@ -14,7 +14,8 @@ public class BlurChanged extends ComponentEvent<AceEditor> {
 	private String txtValue;
 	private String selectionValue;
 
-	public BlurChanged(AceEditor source, boolean fromClient, @EventData("event.detail.value") String txtValue, @EventData("event.detail.selection") String selectionValue) {
+	public BlurChanged(AceEditor source, boolean fromClient, @EventData("event.detail.value") String txtValue,
+			@EventData("event.detail.selection") String selectionValue) {
 		super(source, fromClient);
 		this.txtValue = txtValue;
 		this.selectionValue = selectionValue;
@@ -23,7 +24,7 @@ public class BlurChanged extends ComponentEvent<AceEditor> {
 	public String getTxtValue() {
 		return txtValue;
 	}
-	
+
 	public String getSelectionValue() {
 		return selectionValue;
 	}
