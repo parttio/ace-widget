@@ -38,7 +38,7 @@
       "@polymer/iron-list": "3.1.0",
       "@vaadin/vaadin-list-box": "1.4.0",
       "@vaadin/vaadin-checkbox": "2.5.0",
-      "@f0rce/ace-widget": "1.0.1",
+      "@f0rce/ace-widget": "1.0.2",
       "@vaadin/vaadin-details": "1.2.0",
       "@polymer/iron-icon": "3.0.1",
       "@vaadin/vaadin-time-picker": "2.4.0",
@@ -60,7 +60,7 @@
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.11.0"
     },
-    "hash": "ad4efb5ed677038668da6905c7b88c1285617c9609e25bb8ef10beaa3daf9242"
+    "hash": "6584abc92fa7198b587dcce3a55ecb8ac333ed274e0b9e9fa3a68e16fdc89017"
   },
   "dependencies": {
     "lit-element": "^2.2.1",
@@ -98,7 +98,7 @@
     "@polymer/iron-list": "3.1.0",
     "@vaadin/vaadin-list-box": "1.4.0",
     "@vaadin/vaadin-checkbox": "2.5.0",
-    "@f0rce/ace-widget": "1.0.1",
+    "@f0rce/ace-widget": "1.0.2",
     "@vaadin/vaadin-details": "1.2.0",
     "@polymer/iron-icon": "3.0.1",
     "@vaadin/vaadin-time-picker": "2.4.0",
