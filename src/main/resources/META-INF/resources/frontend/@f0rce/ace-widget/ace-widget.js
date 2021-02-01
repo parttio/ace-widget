@@ -32,7 +32,7 @@ class AceWidget extends PolymerElement {
         }
         #editor {
           border: 1px solid var(--lumo-contrast-20pct);
-          border-radius: var(--lumo-border-radius-s);
+          border-radius: var(--lumo-border-radius);
           @apply --ace-widget-editor;
         }
         .ace_marker-layer .green {
@@ -362,7 +362,7 @@ class AceWidget extends PolymerElement {
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
     editor.setOption("showGutter", this.showGutter);
 
-    setTimeout(this._updatePlaceholder.bind(this), 50);
+    setTimeout(this._updatePlaceholder.bind(this), 5);
 
     editor.$blockScrolling = Infinity;
 

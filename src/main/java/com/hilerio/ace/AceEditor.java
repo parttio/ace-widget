@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -20,7 +19,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
  */
 @SuppressWarnings("serial")
 @Tag("ace-widget")
-@NpmPackage(value = "@f0rce/ace-widget", version = "1.0.1")
+@NpmPackage(value = "@f0rce/ace-widget", version = "1.0.2")
 @JsModule("./@f0rce/ace-widget/ace-widget.js")
 public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
@@ -60,12 +59,6 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 		setWidth("100%");
 		setHeight("300px");
-	};
-
-	@Override
-	protected void onDetach(DetachEvent detachEvent) {
-		super.onDetach(detachEvent);
-		refresh();
 	};
 
 	@Override
