@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Tag;
@@ -19,7 +20,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
  */
 @SuppressWarnings("serial")
 @Tag("ace-widget")
-@NpmPackage(value = "@f0rce/ace-widget", version = "1.0.0")
+@NpmPackage(value = "@f0rce/ace-widget", version = "1.0.1")
 @JsModule("./@f0rce/ace-widget/ace-widget.js")
 public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> implements Focusable<AceEditor> {
 
@@ -67,6 +68,12 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		refresh();
 	};
 
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		refresh();
+	}
+
 	// Updates the Text and selection after the Blur event has been fired (Keyboard
 	// lost focus)
 	private void updateText(BlurChanged event) {
@@ -88,8 +95,6 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	// Refreshes the whole editor because sometimes some settings are lost
 	private void refresh() {
-		// To force a value exchange between client and server
-		this.blur();
 		getElement().setProperty("refresh", UUID.randomUUID().toString());
 	};
 
@@ -191,7 +196,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 	 * @param value int
 	 */
 	public void setTabSize(int value) {
-		getElement().setAttribute("tabSize", String.valueOf(value));
+		getElement().setProperty("tabSize", String.valueOf(value));
 		this.tabSize = value;
 	};
 
@@ -1148,15 +1153,4 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 		getElement().setProperty("rmMarker", "all" + UUID.randomUUID().toString());
 		this.markers = new ArrayList<>();
 	};
-
-	/**
-	 * Changes the visibilty of the editor.
-	 * 
-	 * @param visible boolean
-	 */
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		refresh();
-	}
 }

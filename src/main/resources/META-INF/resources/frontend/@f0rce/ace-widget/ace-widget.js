@@ -1,17 +1,10 @@
 /**
 @license MIT
-Copyright (c) 2015 Horacio "LostInBrittany" Gonzalez
+Copyright 2021 David "F0rce" Dodlek
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-@element ace-widget
-@blurb LostInBrittany's Ace (http://ace.c9.io/) widget
-@homepage index.html
-@demo demo/index.html
 */
-
-/* globals ace */
-/* eslint new-cap: ["error", { "capIsNewExceptions": ["AceWidgetShadowDom"] }] */
 
 import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
 
@@ -35,7 +28,7 @@ class AceWidget extends PolymerElement {
         :host {
           display: block;
           width: 100%;
-          height: auto;
+          height: 100%;
         }
         #editor {
           border: 1px solid var(--lumo-contrast-20pct);
@@ -122,10 +115,6 @@ class AceWidget extends PolymerElement {
       },
       snippets: {
         type: String,
-        notify: true,
-      },
-      autoComplete: {
-        type: Object,
         notify: true,
       },
       minlines: {
@@ -254,24 +243,26 @@ class AceWidget extends PolymerElement {
       await import(`${baseUrl}ext-language_tools.js`);
     }
 
+
     // console.debug("[ace-widget] connectedCallback")
     let div = this.$.editor;
     div.style.width = "100%";
     div.style.height = "100%";
     this.editor = ace.edit(div);
     this.editor.focus = editorFocus;
-    //this.init();
+    this.editor.langTools = ace.require("ace/ext/language_tools");
+    // this.init();
 
     this.dispatchEvent(
       new CustomEvent("editor-ready", {
         detail: { value: this.editor, oldValue: null },
       })
     );
-    // console.debug("[ace-widget] connectedCallback done, initializing")
+
     this.initializeEditor();
   }
 
-  initializeEditor() {
+  initializeEditor() { 
     let editor = this.editor;
 
     this.head = document.head;
@@ -285,9 +276,7 @@ class AceWidget extends PolymerElement {
     ace.config.set("modePath", baseUrl);
     ace.config.set("themePath", baseUrl);
     ace.config.set("workerPath", baseUrl);
-
-    this.themeChanged();
-
+    
     this.editorValue = "";
     this._selection = this.selection;
     editor.setOption("enableSnippets", this.enableSnippets);
@@ -309,9 +298,8 @@ class AceWidget extends PolymerElement {
 
     editor.$blockScrolling = Infinity;
 
-    editor.setTheme("ace/theme/" + this.theme);
-
     // Forcing a xyzChanged() call, because the initial one din't do anything as editor wasn't created yet
+    this.themeChanged();
     this.readonlyChanged();
     this.wrapChanged();
     this.tabSizeChanged();
@@ -368,16 +356,22 @@ class AceWidget extends PolymerElement {
   }
 
   refreshEditor() {
-    if (this.firstRun = true) {
+    if (this.firstRun) {
       return;
     }
+
+    let editor = this.editor;
 
     editor.setOption("enableSnippets", this.enableSnippets);
     editor.setOption("enableBasicAutocompletion", this.enableAutocompletion);
     editor.setOption("enableLiveAutocompletion", this.enableLiveAutocompletion);
     editor.setOption("showGutter", this.showGutter);
 
-    // Forcing a xyzChanged() call to refresh the editor after changing the visibility
+    setTimeout(this._updatePlaceholder.bind(this), 50);
+
+    editor.$blockScrolling = Infinity;
+
+    // Forcing a xyzChanged() call, because the initial one din't do anything as editor wasn't created yet
     this.themeChanged();
     this.readonlyChanged();
     this.wrapChanged();
@@ -392,10 +386,11 @@ class AceWidget extends PolymerElement {
     this.highlightSelectedWordChanged();
 
     editor.setShowPrintMargin(this.showPrintMargin);
+    editor.setOption("showGutter", this.showGutter);
     editor.setShowInvisibles(this.showInvisibles);
     editor.setDisplayIndentGuides(this.displayIndentGuides);
     editor.getSession().setUseWorker(this.useWorker);
-
+   
     editor.setOptions({
       minLines: this.minlines,
       maxLines: this.maxlines,
@@ -574,6 +569,7 @@ class AceWidget extends PolymerElement {
   }
 
   editorBlurChangeAction() {
+    this.updateSelectionAction();
     this.dispatchEvent(
       new CustomEvent("editor-content", {
         detail: {
@@ -594,14 +590,13 @@ class AceWidget extends PolymerElement {
     if (this.editor == undefined) {
       return;
     }
-    let langTools = ace.require("ace/ext/language_tools");
     const rawString = String(this.customAutoCompletion);
     const rawSplit = rawString.split("|");
     if (rawSplit[1] == "") {
-      langTools.setCompleters([
-        langTools.snippetCompleter,
-        langTools.keyWordCompleter,
-      ]);
+      this.editor.completers = [
+        this.editor.langTools.snippetCompleter,
+        this.editor.langTools.keyWordCompleter,
+      ];
     } else {
       var staticWordCompleter = {
         getCompletions: function (editor, session, pos, prefix, callback) {
@@ -618,13 +613,14 @@ class AceWidget extends PolymerElement {
           );
         },
       };
-      langTools.setCompleters([staticWordCompleter]);
+      this.editor.completers = [staticWordCompleter];
     }
   }
 
   _updatePlaceholder() {
-    let shouldShow = !this.editor.session.getValue().length;
-    let node = this.editor.renderer.emptyMessageNode;
+    let editor = this.editor;
+    var shouldShow = this.editorValue == "" ? true : false;
+    var node = editor.renderer.emptyMessageNode;
     if (this.verbose) {
       console.debug("[ace-widget] _updatePlaceholder", {
         shouldShow: shouldShow,
@@ -632,27 +628,31 @@ class AceWidget extends PolymerElement {
       });
     }
     if (!shouldShow && node) {
-      this.editor.renderer.scroller.removeChild(
-        this.editor.renderer.emptyMessageNode
-      );
-      this.editor.renderer.emptyMessageNode = null;
-    } else if (shouldShow && !node) {
       if (this.verbose) {
         console.debug("[ace-widget] _updatePlaceholder - shouldShow && !node");
       }
-      node = this.editor.renderer.emptyMessageNode = document.createElement(
-        "div"
-      );
+      editor.renderer.scroller.removeChild(editor.renderer.emptyMessageNode);
+      editor.renderer.emptyMessageNode = null;
+    } else if (shouldShow && !node) {
+      node = editor.renderer.emptyMessageNode = document.createElement("div");
       node.textContent = this.placeholder;
-      node.className = "ace_comment";
+      node.className = "ace_emptyMessage";
       node.style.padding = "0 9px";
-      node.style.zIndex = "1";
       node.style.position = "absolute";
-      node.style.color = "#aaa";
-      if (this.verbose) {
-        console.debug("[ace-widget] _updatePlaceholder - node", node);
-      }
-      this.editor.renderer.scroller.appendChild(node);
+      node.style.zIndex = 9;
+      node.style.opacity = 0.5;
+      editor.renderer.scroller.appendChild(node);
+    } else if (shouldShow && node) {
+      editor.renderer.scroller.removeChild(editor.renderer.emptyMessageNode);
+      editor.renderer.emptyMessageNode = null;
+      node = editor.renderer.emptyMessageNode = document.createElement("div");
+      node.textContent = this.placeholder;
+      node.className = "ace_emptyMessage";
+      node.style.padding = "0 9px";
+      node.style.position = "absolute";
+      node.style.zIndex = 9;
+      node.style.opacity = 0.5;
+      editor.renderer.scroller.appendChild(node);
     }
   }
 

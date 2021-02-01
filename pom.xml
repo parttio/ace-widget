@@ -7,12 +7,12 @@
 	<groupId>com.hilerio</groupId>
 	<artifactId>ace-widget</artifactId>
 
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>ace-widget</name>
 	<description>Integration of ace-widget for Vaadin platform</description>
 
 	<properties>
-		<vaadin.version>14.4.3</vaadin.version>
+		<vaadin.version>14.4.6</vaadin.version>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
