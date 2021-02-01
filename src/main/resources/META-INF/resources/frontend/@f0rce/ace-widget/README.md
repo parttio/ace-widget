@@ -1,5 +1,6 @@
 [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/ace-widget1)
 [![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/ace-widget1.svg)](https://vaadin.com/directory/component/ace-widget1)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FF0rce%2Face-widget.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FF0rce%2Face-widget?ref=badge_shield)
 # ace-widget frontend #
 
 Even <strong>more</strong> embeddable code editor
@@ -35,3 +36,6 @@ Full documentation can be found on the [Java backend](https://github.com/Sergio7
 ## License
 
 [MIT License](http://opensource.org/licenses/MIT)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FF0rce%2Face-widget.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FF0rce%2Face-widget?ref=badge_large)
