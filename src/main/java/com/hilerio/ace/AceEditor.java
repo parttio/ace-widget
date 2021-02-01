@@ -95,7 +95,7 @@ public class AceEditor extends AbstractSinglePropertyField<AceEditor, String> im
 
 	// Refreshes the whole editor because sometimes some settings are lost
 	private void refresh() {
-		getElement().setProperty("refresh", UUID.randomUUID().toString());
+		getElement().callJsFunction("refreshEditor");
 	};
 
 	/**

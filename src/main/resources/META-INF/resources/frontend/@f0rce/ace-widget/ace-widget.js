@@ -207,11 +207,6 @@ class AceWidget extends PolymerElement {
         value: "",
         observer: "rmMarkers",
       },
-      refresh: {
-        type: String,
-        value: "",
-        observer: "refreshEditor",
-      },
       firstRun: {
         type: Boolean,
         value: true,
