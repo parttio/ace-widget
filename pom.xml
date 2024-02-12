@@ -7,21 +7,21 @@
 	<groupId>com.hilerio</groupId>
 	<artifactId>ace-widget</artifactId>
 
-	<version>1.0.2</version>
+	<version>2.0-SNAPSHOT</version>
 	<name>ace-widget</name>
 	<description>Integration of ace-widget for Vaadin platform</description>
 
 	<properties>
-		<vaadin.version>14.4.6</vaadin.version>
+		<vaadin.version>24.3.0</vaadin.version>
 
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<drivers.dir>${project.basedir}/drivers</drivers.dir>
 
-		<jetty.version>9.4.15.v20190215</jetty.version>
+		<jetty.version>11.0.13</jetty.version>
 	</properties>
 	<organization>
 		<name>Sergio Alberto Hilerio</name>
@@ -162,19 +162,19 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
 				<configuration>
-					<scanIntervalSeconds>3</scanIntervalSeconds>
+					<scan>3</scan>
 					<!-- Use test scope because the UI/demo classes are in the test package. -->
 					<useTestScope>true</useTestScope>
 					<supportedPackagings>
 						<supportedPackaging>jar</supportedPackaging>
 					</supportedPackagings>
-					<webAppConfig>
+					<webApp>
 						<resourceBases>
 							<baseResource>
 								src/main/resources/META-INF/resources
 							</baseResource>
 						</resourceBases>
-					</webAppConfig>
+					</webApp>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -233,7 +233,7 @@
 						</executions>
 						<configuration>
 							<quiet>true</quiet>
-							<additionalparam>-Xdoclint:none</additionalparam>
+							<doclint>none</doclint>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -290,7 +290,7 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>${jetty.version}</version>
 						<configuration>
-							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<scan>0</scan>
 							<supportedPackagings>
 								<supportedPackaging>jar</supportedPackaging>
 							</supportedPackagings>
