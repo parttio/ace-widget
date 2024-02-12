@@ -17,7 +17,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 @Route("")
 public class View extends VerticalLayout {
 
