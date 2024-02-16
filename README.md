@@ -23,7 +23,7 @@ Install the component using [Vaadin Directory](https://vaadin.com/directory/comp
 <dependency>
    <groupId>com.hilerio</groupId>
    <artifactId>ace-widget</artifactId>
-   <version>1.0.2</version>
+   <version>2.0.0</version>
 </dependency>
 
 <repository>
@@ -32,7 +32,9 @@ Install the component using [Vaadin Directory](https://vaadin.com/directory/comp
 </repository>
 ```
 
-*Latest Version: v1.0.2*
+*Latest Version for Vaadin 14-23: v1.0.2*
+
+*Latest Version for Vaadin 24+: v2.0.0*
 
 
 ## Documentation
