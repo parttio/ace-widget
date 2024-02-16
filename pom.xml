@@ -21,7 +21,7 @@
 
 		<drivers.dir>${project.basedir}/drivers</drivers.dir>
 
-		<jetty.version>11.0.13</jetty.version>
+		<jetty.version>11.0.20</jetty.version>
 		<drivers.dir>${project.basedir}/drivers</drivers.dir>
 		<drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
 	</properties>
