@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/@f0rce/ace-widget)
 ![Downloads on npmjs.com](https://img.shields.io/npm/dt/@f0rce/ace-widget.svg)
 
-# Ace Editor for Vaadin Flow 14
+# Ace Editor for Vaadin 24
 
 Even **more** embeddable code editor
 custom Vaadin widget - [Ace](http://ace.c9.io/) - The High Performance Code Editor
@@ -12,7 +12,7 @@ custom Vaadin widget - [Ace](http://ace.c9.io/) - The High Performance Code Edit
 > of [PolymerLabs ace-element](https://github.com/PolymerLabs/ace-element)
 
 **Created** by Sergio Alberto Hilerio<br/>
-**Maintained** by David "F0rce" Dodlek
+**Maintained** by David "F0rce" Dodlek 
 
 
 ## Install
