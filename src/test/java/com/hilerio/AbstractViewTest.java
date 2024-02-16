@@ -1,6 +1,8 @@
 package com.hilerio;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -39,6 +41,10 @@ public abstract class AbstractViewTest extends ParallelTest {
         this.route = route;
     }
 
+    @BeforeClass
+    public static void setupClass() {
+        WebDriverManager.chromedriver().setup();
+    }
     @Before
     public void setup() throws Exception {
         if (isUsingHub()) {
