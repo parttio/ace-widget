@@ -24,7 +24,17 @@
 		<jetty.version>11.0.13</jetty.version>
 		<drivers.dir>${project.basedir}/drivers</drivers.dir>
 		<drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
+
+		<!-- Doing release by uploading to vaadin.com/directory -->
+		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
+
+	<scm>
+		<url>https://github.com/parttio/ace-widgetn</url>
+		<connection>scm:git:git://github.com/parttio/ace-widget.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:/parttio/ace-widget.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 	<organization>
 		<name>Sergio Alberto Hilerio</name>
 	</organization>
